@@ -1,5 +1,12 @@
 package com.example.ingredientparser;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +15,8 @@ import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,9 +26,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.renderscript.ScriptGroup;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,12 +50,23 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     Button button_capture;
     TextView textview_data;
     Bitmap bitmap;
+
+    Button button_camera;
+
+    Uri imageUri;
+
+    ImageView imageIv;
+    
+    int flag = 0;
     private static final int REQUEST_CAMERA_CODE = 100;
+
 
 
 
@@ -54,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         button_capture = findViewById(R.id.button_capture);
+        button_camera = findViewById(R.id.button_camera);
         textview_data = findViewById(R.id.text_data);
 
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -69,6 +92,38 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
+
+        });
+        button_camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.TITLE, "Sample Title");
+                values.put(MediaStore.Images.Media.TITLE, "Sample Description");
+
+                imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+                cameraActivityResultLauncher.launch(intent);
+                //CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(MainActivity.this);
+
+
+            }
+
+            private ActivityResultLauncher<Intent> cameraActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        flag = 1;
+                        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(MainActivity.this);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+            });
         });
     }
 
@@ -78,6 +133,18 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
+
+            if(flag==1)
+            {
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+
+                    getTextFromImage(bitmap);
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
                 try {
@@ -107,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
                             String recognizedText = text.getText();
                             textview_data.setText(recognizedText);
                             System.out.println("Done");
+                            processData(recognizedText);
+
                             // ...
                         }
                     })
@@ -126,6 +195,39 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+
+
     }
+
+    private void processData(String recognizedText) {
+        // Split the string by spaces to get individual words
+        String preprocessedText  = recognizedText.replaceAll("[\\[\\]()0-9%]", "");
+
+        int ingredientsIndex = preprocessedText.toLowerCase().indexOf("ingredients");
+
+        if (ingredientsIndex != -1) {
+            // If "Ingredients" is found, extract the substring after it
+            String ingredientsString = preprocessedText.substring(ingredientsIndex + "Ingredients".length()).trim();
+            // Use an ArrayList to store the words
+            String[] words = ingredientsString.split(",");
+            ArrayList<String> ingredientList = new ArrayList<>();
+
+
+            for (String word : words) {
+                // Add each word to the ArrayList
+                ingredientList.add(word);
+            }
+
+            int numOfIngredients = ingredientList.size();
+
+            for (int i = 0; i < numOfIngredients; i++) {
+                // Retrieve each ingredient one by one from the ArrayList and display it
+                System.out.println("Ingredient " + i + ": " + ingredientList.get(i));
+            }
+        }
+
+
+    }
+
 }
 
