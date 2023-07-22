@@ -18,7 +18,7 @@
 
     <style name="Theme.IngredientParser" parent="Base.Theme.IngredientParser" />
 
-    <style name = "DialogueAnimation">
+    <style name="DialogueAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_in</item>
         <item name="android:windowExitAnimation">@anim/slide_out</item>
     </style>
