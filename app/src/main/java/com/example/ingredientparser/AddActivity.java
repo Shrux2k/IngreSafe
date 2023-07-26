@@ -51,6 +51,8 @@ import com.google.android.gms.vision.Frame;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -62,6 +64,15 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class AddActivity extends AppCompatActivity {
     Button button_capture;
@@ -71,6 +82,10 @@ public class AddActivity extends AppCompatActivity {
     Button button_camera;
 
     Uri imageUri;
+
+    FirebaseFirestore firestore;
+
+    List<String> list = new ArrayList<>();
 
 
     int flag = 0;
@@ -154,6 +169,7 @@ public class AddActivity extends AppCompatActivity {
 
 
             }
+
             private ActivityResultLauncher<Intent> cameraActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
@@ -169,6 +185,7 @@ public class AddActivity extends AppCompatActivity {
             });
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -176,8 +193,7 @@ public class AddActivity extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
 
-            if(flag==1)
-            {
+            if (flag == 1) {
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
 
@@ -211,8 +227,7 @@ public class AddActivity extends AppCompatActivity {
             Task<Text> result = recognizer.process(image)
                     .addOnSuccessListener(new OnSuccessListener<Text>() {
                         @Override
-                        public void onSuccess(Text text)
-                        {
+                        public void onSuccess(Text text) {
                             String recognizedText = text.getText();
                             textview_data.setText(recognizedText);
                             System.out.println("Done");
@@ -227,23 +242,21 @@ public class AddActivity extends AppCompatActivity {
                                 public void onFailure(@NonNull Exception e) {
                                     // Task failed with an exception
                                     // ...
-                                    Toast.makeText(AddActivity.this,"Failed" +e.getMessage(),Toast.LENGTH_LONG).show();
+                                    Toast.makeText(AddActivity.this, "Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
                                     System.out.println("Failed");
                                 }
                             });
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
 
         }
-
 
 
     }
 
     private void processData(String recognizedText) {
         // Split the string by spaces to get individual words
-        String preprocessedText  = recognizedText.replaceAll("[\\[\\]()0-9%]", "");
+        String preprocessedText = recognizedText.replaceAll("[\\[\\]()0-9%]", "");
 
         int ingredientsIndex = preprocessedText.toLowerCase().indexOf("ingredients");
 
@@ -252,7 +265,13 @@ public class AddActivity extends AppCompatActivity {
             String ingredientsString = preprocessedText.substring(ingredientsIndex + "Ingredients".length()).trim();
             // Use an ArrayList to store the words
             String[] words = ingredientsString.split(",");
+
+            for (int i = 0; i < words.length; i++) {
+                words[i] = words[i].trim();
+            }
+
             ArrayList<String> ingredientList = new ArrayList<>();
+            List<String> foundIngredients = new ArrayList<>();
 
 
             for (String word : words) {
@@ -267,10 +286,53 @@ public class AddActivity extends AppCompatActivity {
                 System.out.println("Ingredient " + i + ": " + ingredientList.get(i));
                 //Log.d(TAG, "Ingredient " + i + ": " + ingredientList.get(i));
             }
+            retrieveData(ingredientList);
+
+
         }
 
 
     }
 
+    private void retrieveData(ArrayList<String> ingredientList) {
+        firestore = FirebaseFirestore.getInstance();
+        String collectionPath = "Ingredients";
+
+        firestore.collection(collectionPath).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<String> ingredientsList = new ArrayList<>();
+                for (int i = 0; i < ingredientList.size(); i++) {
+                    String ingredientNameToRetrieve = ingredientList.get(i);
+
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        // Get the data from each document
+                        String ingredientName = documentSnapshot.getString("Name");
+                        String description = documentSnapshot.getString("Description");
+                        if (ingredientNameToRetrieve.equals(ingredientName)) {
+                            ingredientsList.add(ingredientName + ": " + description);
+                        }
+                    }
+                }
+
+                // Now the ingredientsList is populated with data, you can use it here or pass it to another method for further processing
+                list = ingredientList;
+                System.out.println("Ingredients with their descriptions");
+                for (int i = 0; i < ingredientsList.size(); i++) {
+                    System.out.println(ingredientsList.get(i));
+                }
+
+                Intent intent = new Intent(AddActivity.this, NoteActivity.class);
+                intent.putStringArrayListExtra("INGREDIENTS_LIST", (ArrayList<String>) ingredientsList);
+                startActivity(intent);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println(e);
+            }
+        });
+    }
 }
+
 

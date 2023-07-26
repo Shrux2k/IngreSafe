@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(),AddActivity.class));
         overridePendingTransition(0,0);
 
+
+
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setSelectedItemId(R.id.add);

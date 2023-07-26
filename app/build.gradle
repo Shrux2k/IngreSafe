@@ -73,5 +73,9 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
+    implementation 'com.google.firebase:firebase-firestore:17.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.0'
+    api 'com.google.firebase:firebase-core:21.1.1'
+
 
 }
