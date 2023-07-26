@@ -14,12 +14,21 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
+import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class NoteActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
 
     TextView textView;
+
+    private boolean isIntentReceived = false;
+
 
     Button view;
 
@@ -28,9 +37,12 @@ public class NoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
 
-        textView = findViewById(R.id.textdata);
 
-        view = findViewById(R.id.ViewButton);
+        //textView = findViewById(R.id.textdata);
+
+        //view = findViewById(R.id.ViewButton);
+
+
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -67,24 +79,42 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = getIntent();
-                ArrayList<String> ingredientsList = intent.getStringArrayListExtra("INGREDIENTS_LIST");
-                //textView.setText(ingredientsList.toString());
+        Intent intent = getIntent();
+        List<Ingredient> ingredientsList = (List<Ingredient>) intent.getSerializableExtra("INGREDIENTS_LIST");
 
-                if (ingredientsList != null && !ingredientsList.isEmpty()) {
-                    // Display the content if the ingredientsList has data
-                    textView.setText(ingredientsList.toString());
-                } else {
-                    // Show a toast message "scan first" if ingredientsList is empty
-                    Toast.makeText(getApplicationContext(), "You need to scan first", Toast.LENGTH_LONG).show();
-                }
+
+
+
+        if (ingredientsList != null && !ingredientsList.isEmpty()) {
+            // Ingredients received via Intent, display the expandable RecyclerView
+            List<IngredientGroup> ingredientGroups = new ArrayList<>();
+            for (Ingredient ingredient : ingredientsList) {
+                IngredientGroup group = new IngredientGroup(ingredient.getName(), Arrays.asList(ingredient));
+                ingredientGroups.add(group);
             }
-        });
 
+            RecyclerView recyclerView = findViewById(R.id.expandableRecyclerView);
+            IngredientAdapter adapter = new IngredientAdapter(ingredientGroups);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapter);
+        } else {
+            // No Ingredients received, show a toast message "You need to scan first."
+            Toast.makeText(getApplicationContext(), "You need to scan first.", Toast.LENGTH_LONG).show();
+        }
 
+    }
+
+    private void setupRecyclerView(List<Ingredient> ingredientsList) {
+        RecyclerView recyclerView = findViewById(R.id.expandableRecyclerView);
+        List<ExpandableGroup> ingredientGroups = new ArrayList<>();
+
+        // Assuming you have a list of Ingredient objects called 'ingredientsList'
+        IngredientGroup group = new IngredientGroup("Ingredients", ingredientsList);
+        ingredientGroups.add(group);
+
+        IngredientAdapter adapter = new IngredientAdapter(ingredientGroups);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
     }
 
 }

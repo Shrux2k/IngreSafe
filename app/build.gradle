@@ -76,6 +76,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:17.0.0'
     implementation 'com.google.firebase:firebase-core:16.0.0'
     api 'com.google.firebase:firebase-core:21.1.1'
+    implementation 'com.bignerdranch.android:expandablerecyclerview:1.0.4'
+    implementation 'com.thoughtbot:expandablerecyclerview:1.4'
+
+
 
 
 }

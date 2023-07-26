@@ -73,6 +73,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import java.io.Serializable;
 
 public class AddActivity extends AppCompatActivity {
     Button button_capture;
@@ -86,6 +87,8 @@ public class AddActivity extends AppCompatActivity {
     FirebaseFirestore firestore;
 
     List<String> list = new ArrayList<>();
+
+
 
 
     int flag = 0;
@@ -301,7 +304,7 @@ public class AddActivity extends AppCompatActivity {
         firestore.collection(collectionPath).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<String> ingredientsList = new ArrayList<>();
+                List<Ingredient> ingredientsList = new ArrayList<>();
                 for (int i = 0; i < ingredientList.size(); i++) {
                     String ingredientNameToRetrieve = ingredientList.get(i);
 
@@ -309,8 +312,11 @@ public class AddActivity extends AppCompatActivity {
                         // Get the data from each document
                         String ingredientName = documentSnapshot.getString("Name");
                         String description = documentSnapshot.getString("Description");
-                        if (ingredientNameToRetrieve.equals(ingredientName)) {
-                            ingredientsList.add(ingredientName + ": " + description);
+                        if (ingredientNameToRetrieve.equals(ingredientName))
+                        {
+                            Ingredient ingredient = new Ingredient(ingredientName, description);
+                            ingredientsList.add(ingredient);
+                            //ingredientsList.add(ingredientName + ": " + description);
                         }
                     }
                 }
@@ -323,7 +329,7 @@ public class AddActivity extends AppCompatActivity {
                 }
 
                 Intent intent = new Intent(AddActivity.this, NoteActivity.class);
-                intent.putStringArrayListExtra("INGREDIENTS_LIST", (ArrayList<String>) ingredientsList);
+                intent.putExtra("INGREDIENTS_LIST", (Serializable) ingredientsList);
                 startActivity(intent);
             }
         }).addOnFailureListener(new OnFailureListener() {
