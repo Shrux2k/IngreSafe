@@ -27,6 +27,8 @@ public class NoteActivity extends AppCompatActivity {
 
     TextView textView;
 
+    private List<String> allergensList;
+
     private boolean isIntentReceived = false;
 
 
@@ -36,6 +38,23 @@ public class NoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
+
+        allergensList = new ArrayList<>();
+        allergensList.add("Milk");
+        allergensList.add("Eggs");
+        allergensList.add("Peanuts");
+        allergensList.add("Tree Nuts");
+        allergensList.add("Fish");
+        allergensList.add("Wheat");
+        allergensList.add("Soy");
+        allergensList.add("Sesame");
+        allergensList.add("Mustard");
+        allergensList.add("Crème Fraîche Milk");
+        allergensList.add("Soya Bean");
+
+
+
+
 
 
         //textView = findViewById(R.id.textdata);
@@ -94,7 +113,7 @@ public class NoteActivity extends AppCompatActivity {
             }
 
             RecyclerView recyclerView = findViewById(R.id.expandableRecyclerView);
-            IngredientAdapter adapter = new IngredientAdapter(ingredientGroups);
+            IngredientAdapter adapter = new IngredientAdapter(ingredientGroups,allergensList);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(adapter);
         } else {
@@ -105,17 +124,5 @@ public class NoteActivity extends AppCompatActivity {
 
     }
 
-    private void setupRecyclerView(List<Ingredient> ingredientsList) {
-        RecyclerView recyclerView = findViewById(R.id.expandableRecyclerView);
-        List<ExpandableGroup> ingredientGroups = new ArrayList<>();
-
-        // Assuming you have a list of Ingredient objects called 'ingredientsList'
-        IngredientGroup group = new IngredientGroup("Ingredients", ingredientsList);
-        ingredientGroups.add(group);
-
-        IngredientAdapter adapter = new IngredientAdapter(ingredientGroups);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-    }
 
 }

@@ -13,12 +13,28 @@
         android:src="@drawable/arrow_icon"
         android:padding="8dp"/>
 
-    <TextView
-        android:id="@+id/groupNameTextView"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:padding="8dp"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/groupNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:padding="8dp"/>
+
+        <TextView
+            android:id="@+id/potentialAllergenTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@android:color/holo_red_dark"
+            android:text="(Potential Allergen)"
+            android:visibility="gone" /> <!-- Initially hidden, will be shown if it's an allergen -->
+
+    </LinearLayout>
 
     <!-- Add any other views you want for the group here -->
 

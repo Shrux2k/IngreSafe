@@ -6,6 +6,7 @@ import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +18,19 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
 
     private IngredientGroup expandedGroup = null; // Variable to keep track of the currently expanded group
 
-    public IngredientAdapter(List<? extends ExpandableGroup> groups) {
+    private List<String> allergensList;
+
+
+    public IngredientAdapter(List<? extends ExpandableGroup> groups, List<String> allergensList) {
         super(groups);
+        this.allergensList = allergensList;
+
     }
 
     @Override
     public IngredientViewHolder onCreateGroupViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group, parent, false);
-        return new IngredientViewHolder(view);
+        return new IngredientViewHolder(view,allergensList);
     }
 
     @Override
@@ -37,6 +43,9 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
     public void onBindGroupViewHolder(IngredientViewHolder holder, int flatPosition, ExpandableGroup group) {
         holder.setIngredientName(group);
         holder.setExpanded(group == expandedGroup); // Set the expansion state of the group
+
+        boolean isAllergen = allergensList.contains(group.getTitle());
+        holder.setIngredientNameColor(isAllergen);
     }
 
     @Override
@@ -47,25 +56,43 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
 
     static class IngredientViewHolder extends GroupViewHolder {
         private TextView groupNameTextView;
+        private TextView potentialAllergenTextView;
+
         private View arrow;
 
-        IngredientViewHolder(View itemView) {
+        private List<String> allergensList;
+
+
+
+        IngredientViewHolder(View itemView, List<String> allergensList) {
             super(itemView);
             groupNameTextView = itemView.findViewById(R.id.groupNameTextView);
+            potentialAllergenTextView = itemView.findViewById(R.id.potentialAllergenTextView);
             arrow = itemView.findViewById(R.id.arrow);
+            this.allergensList = allergensList;
         }
 
         void setIngredientName(ExpandableGroup group) {
             groupNameTextView.setText(group.getTitle());
+            boolean isAllergen = allergensList.contains(group.getTitle());
+            potentialAllergenTextView.setVisibility(isAllergen ? View.VISIBLE : View.GONE);
         }
 
         void setExpanded(boolean isExpanded) {
             arrow.setRotation(isExpanded ? 180 : 0); // Rotate the arrow icon based on the expansion state
         }
+
+        void setIngredientNameColor(boolean isAllergen) {
+            // Set the text color of the ingredient name based on whether it's an allergen or not
+            int color = isAllergen ? Color.RED : Color.BLACK;
+            groupNameTextView.setTextColor(color);
+        }
     }
 
     static class DescriptionViewHolder extends ChildViewHolder {
         private TextView descriptionTextView;
+
+
 
         DescriptionViewHolder(View itemView) {
             super(itemView);
