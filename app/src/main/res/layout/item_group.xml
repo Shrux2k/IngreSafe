@@ -6,13 +6,19 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_icon"
+        android:padding="8dp"/>
+
     <TextView
         android:id="@+id/groupNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_weight="1" />
+        android:padding="8dp"/>
 
     <!-- Add any other views you want for the group here -->
 

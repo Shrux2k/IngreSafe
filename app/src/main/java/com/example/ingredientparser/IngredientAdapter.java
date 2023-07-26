@@ -1,7 +1,6 @@
 package com.example.ingredientparser;
 
-import com.example.ingredientparser.Ingredient;
-import com.example.ingredientparser.R;
+import com.example.ingredientparser.IngredientGroup;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
@@ -15,6 +14,8 @@ import android.widget.TextView;
 import java.util.List;
 
 public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientAdapter.IngredientViewHolder, IngredientAdapter.DescriptionViewHolder> {
+
+    private IngredientGroup expandedGroup = null; // Variable to keep track of the currently expanded group
 
     public IngredientAdapter(List<? extends ExpandableGroup> groups) {
         super(groups);
@@ -34,7 +35,8 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
 
     @Override
     public void onBindGroupViewHolder(IngredientViewHolder holder, int flatPosition, ExpandableGroup group) {
-        holder.setIngredientName(group.getTitle());
+        holder.setIngredientName(group);
+        holder.setExpanded(group == expandedGroup); // Set the expansion state of the group
     }
 
     @Override
@@ -45,14 +47,20 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
 
     static class IngredientViewHolder extends GroupViewHolder {
         private TextView groupNameTextView;
+        private View arrow;
 
         IngredientViewHolder(View itemView) {
             super(itemView);
             groupNameTextView = itemView.findViewById(R.id.groupNameTextView);
+            arrow = itemView.findViewById(R.id.arrow);
         }
 
-        void setIngredientName(String ingredientName) {
-            groupNameTextView.setText(ingredientName);
+        void setIngredientName(ExpandableGroup group) {
+            groupNameTextView.setText(group.getTitle());
+        }
+
+        void setExpanded(boolean isExpanded) {
+            arrow.setRotation(isExpanded ? 180 : 0); // Rotate the arrow icon based on the expansion state
         }
     }
 
@@ -67,5 +75,10 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
         void setIngredientDescription(String ingredientDescription) {
             descriptionTextView.setText(ingredientDescription);
         }
+    }
+
+    // Method to set the currently expanded group
+    public void setExpandedGroup(IngredientGroup group) {
+        expandedGroup = group;
     }
 }

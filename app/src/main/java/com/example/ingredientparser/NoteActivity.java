@@ -102,6 +102,7 @@ public class NoteActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "You need to scan first.", Toast.LENGTH_LONG).show();
         }
 
+
     }
 
     private void setupRecyclerView(List<Ingredient> ingredientsList) {
