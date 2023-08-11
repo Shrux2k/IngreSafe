@@ -6,23 +6,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".NoteActivity">
 
+    <!-- RecyclerView for the main content -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/expandableRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="529dp"
+        android:layout_above="@id/bottom_navigation"
+        android:layout_marginBottom="73dp" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
-
-
-
-<com.google.android.material.bottomnavigation.BottomNavigationView
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bottom_navigation"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         app:menu="@menu/bottom_menu"/>
+
+    <!-- Optional: Adding a semi-transparent overlay for a cleaner look -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:alpha="0.2"
+        android:id="@+id/overlay"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="620dp"
+        android:onClick="analysebutton"
+        android:gravity="center"
+        android:text="Analyse healthiness" />
 
 </RelativeLayout>

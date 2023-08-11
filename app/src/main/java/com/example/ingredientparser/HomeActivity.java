@@ -53,18 +53,12 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(),HomeActivity.class));
                     overridePendingTransition(0,0);
                     return true;
-                } else if (itemId == R.id.note) {
-                    startActivity(new Intent(getApplicationContext(),NoteActivity.class));
-                    overridePendingTransition(0,0);
-                    return true;
+
                 } else if (itemId == R.id.add) {
                     startActivity(new Intent(getApplicationContext(),AddActivity.class));
                     overridePendingTransition(0,0);
                     return true;
-                } else if (itemId==R.id.health) {
-                    startActivity(new Intent(getApplicationContext(),HealthActivity.class));
-                    overridePendingTransition(0,0);
-                    return true;
+
                 } else if (itemId==R.id.info) {
                     startActivity(new Intent(getApplicationContext(),InfoActivity.class));
                     overridePendingTransition(0,0);

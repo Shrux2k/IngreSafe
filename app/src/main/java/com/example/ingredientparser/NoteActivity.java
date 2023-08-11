@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,14 +26,19 @@ public class NoteActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
 
+
     TextView textView;
+
+    String recognizedText;
+
+    //Button analyse = findViewById(R.id.analyse);
 
     private List<String> allergensList;
 
     private boolean isIntentReceived = false;
 
 
-    Button view;
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +66,14 @@ public class NoteActivity extends AppCompatActivity {
         //textView = findViewById(R.id.textdata);
 
         //view = findViewById(R.id.ViewButton);
+        button = findViewById(R.id.button);
+
 
 
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        bottomNavigationView.setSelectedItemId(R.id.note);
+        //bottomNavigationView.setSelectedItemId(R.id.note);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -75,18 +83,12 @@ public class NoteActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(),HomeActivity.class));
                     overridePendingTransition(0,0);
                     return true;
-                } else if (itemId == R.id.note) {
-                    startActivity(new Intent(getApplicationContext(),NoteActivity.class));
-                    overridePendingTransition(0,0);
-                    return true;
+
                 } else if (itemId == R.id.add) {
                     startActivity(new Intent(getApplicationContext(),AddActivity.class));
                     overridePendingTransition(0,0);
                     return true;
-                } else if (itemId==R.id.health) {
-                    startActivity(new Intent(getApplicationContext(),HealthActivity.class));
-                    overridePendingTransition(0,0);
-                    return true;
+
                 } else if (itemId==R.id.info) {
                     startActivity(new Intent(getApplicationContext(),InfoActivity.class));
                     overridePendingTransition(0,0);
@@ -98,10 +100,21 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
 
+        Button button = findViewById(R.id.button);
+
+        // Set an OnClickListener for the button
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // This code will execute when the button is clicked
+                // You can add your logic here
+                analysebutton(); // Call the method you specified in android:onClick
+            }
+        });
+
         Intent intent = getIntent();
         List<Ingredient> ingredientsList = (List<Ingredient>) intent.getSerializableExtra("INGREDIENTS_LIST");
-
-
+        recognizedText = intent.getStringExtra("RECOGNIZED_TEXT");
 
 
         if (ingredientsList != null && !ingredientsList.isEmpty()) {
@@ -116,12 +129,20 @@ public class NoteActivity extends AppCompatActivity {
             IngredientAdapter adapter = new IngredientAdapter(ingredientGroups,allergensList);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(adapter);
+
+
         } else {
             // No Ingredients received, show a toast message "You need to scan first."
-            Toast.makeText(getApplicationContext(), "You need to scan first.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "No Ingredients found, please scan.", Toast.LENGTH_LONG).show();
         }
 
 
+    }
+
+    private void analysebutton() {
+        Intent intent = new Intent(NoteActivity.this, HealthActivity.class);
+        intent.putExtra("RECOGNIZED_TEXT", recognizedText);
+        startActivity(intent);
     }
 
 

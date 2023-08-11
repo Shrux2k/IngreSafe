@@ -59,25 +59,22 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
 
-    //HomeFragment homeFragment = new HomeFragment();
 
-    HomeActivity homeActivity = new HomeActivity();
-    //NoteFragment noteFragment = new NoteFragment();
-
-    NoteActivity noteActivity = new NoteActivity();
+    //HomeActivity homeActivity = new HomeActivity();
 
 
-    //AddFragment addFragment = new AddFragment();
+    //NoteActivity noteActivity = new NoteActivity();
 
-    AddActivity addActivity = new AddActivity();
 
-   // HealthinessFragment healthinessFragment = new HealthinessFragment();
 
-    HealthActivity healthActivity = new HealthActivity();
+    //AddActivity addActivity = new AddActivity();
 
-    //InformationFragment informationFragment = new InformationFragment();
 
-    InfoActivity infoActivity = new InfoActivity();
+    //HealthActivity healthActivity = new HealthActivity();
+
+
+    //InfoActivity infoActivity = new InfoActivity();
+
 
 
     @Override
@@ -88,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(0,0);
 
 
-
+        /*
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setSelectedItemId(R.id.add);
@@ -121,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
-        });
+        }); */
     }
 
 }

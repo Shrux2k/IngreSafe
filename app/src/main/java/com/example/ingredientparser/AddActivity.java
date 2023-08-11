@@ -77,7 +77,7 @@ import java.io.Serializable;
 
 public class AddActivity extends AppCompatActivity {
     Button button_capture;
-    TextView textview_data;
+    //TextView textview_data;
     Bitmap bitmap;
 
     Button button_camera;
@@ -92,6 +92,8 @@ public class AddActivity extends AppCompatActivity {
 
 
     int flag = 0;
+
+    String recognizedText;
     private static final int REQUEST_CAMERA_CODE = 100;
 
     BottomNavigationView bottomNavigationView;
@@ -103,7 +105,7 @@ public class AddActivity extends AppCompatActivity {
 
         button_capture = findViewById(R.id.button_capture);
         button_camera = findViewById(R.id.button_camera);
-        textview_data = findViewById(R.id.text_data);
+        //textview_data = findViewById(R.id.text_data);
 
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -118,18 +120,12 @@ public class AddActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
-                } else if (itemId == R.id.note) {
-                    startActivity(new Intent(getApplicationContext(), NoteActivity.class));
-                    overridePendingTransition(0, 0);
-                    return true;
+
                 } else if (itemId == R.id.add) {
                     startActivity(new Intent(getApplicationContext(), AddActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
-                } else if (itemId == R.id.health) {
-                    startActivity(new Intent(getApplicationContext(), HealthActivity.class));
-                    overridePendingTransition(0, 0);
-                    return true;
+
                 } else if (itemId == R.id.info) {
                     startActivity(new Intent(getApplicationContext(), InfoActivity.class));
                     overridePendingTransition(0, 0);
@@ -231,8 +227,8 @@ public class AddActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<Text>() {
                         @Override
                         public void onSuccess(Text text) {
-                            String recognizedText = text.getText();
-                            textview_data.setText(recognizedText);
+                             recognizedText = text.getText();
+                            //textview_data.setText(recognizedText);
                             System.out.println("Done");
                             processData(recognizedText);
 
@@ -259,6 +255,12 @@ public class AddActivity extends AppCompatActivity {
 
     private void processData(String recognizedText) {
         // Split the string by spaces to get individual words
+
+        if(recognizedText.isEmpty())
+        {
+            Toast.makeText(getApplicationContext(), "No Ingredients found, please try again", Toast.LENGTH_LONG).show();
+
+        }
         String preprocessedText = recognizedText.replaceAll("[\\[\\]()0-9%]", "");
 
         int ingredientsIndex = preprocessedText.toLowerCase().indexOf("ingredients");
@@ -321,6 +323,8 @@ public class AddActivity extends AppCompatActivity {
                     }
                 }
 
+
+
                 // Now the ingredientsList is populated with data, you can use it here or pass it to another method for further processing
                 list = ingredientList;
                 System.out.println("Ingredients with their descriptions");
@@ -328,14 +332,24 @@ public class AddActivity extends AppCompatActivity {
                     System.out.println(ingredientsList.get(i));
                 }
 
-                Intent intent = new Intent(AddActivity.this, NoteActivity.class);
-                intent.putExtra("INGREDIENTS_LIST", (Serializable) ingredientsList);
-                startActivity(intent);
+                if(!ingredientList.isEmpty()) {
+                    Intent intent = new Intent(AddActivity.this, NoteActivity.class);
+                    intent.putExtra("INGREDIENTS_LIST", (Serializable) ingredientsList);
+                    intent.putExtra("RECOGNIZED_TEXT", recognizedText);
+                    startActivity(intent);
+
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "No Ingredients found, please try again", Toast.LENGTH_LONG).show();
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 System.out.println(e);
+                Toast.makeText(getApplicationContext(), "No Ingredients found, please try again", Toast.LENGTH_LONG).show();
+
             }
         });
     }

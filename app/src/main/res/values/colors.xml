@@ -9,4 +9,17 @@
     <color name="white">#FFFFFFFF</color>
     <color name="lavender">#8692f7</color>
     <color name="allergenColor">#FF0000</color>
+    <color name="gray">#575757</color>
+    <!-- Focused EditText Background Color -->
+    <color name="focusedEditTextBackground">#F2F2F2</color>
+
+    <!-- Focused EditText Border Color -->
+    <color name="focusedEditTextBorderColor">@color/gray</color>
+
+    <!-- Normal EditText Background Color -->
+    <color name="normalEditTextBackground">#FFFFFF</color>
+
+    <!-- Normal EditText Border Color -->
+    <color name="normalEditTextBorderColor">#C0C0C0</color>
+
 </resources>

@@ -12,14 +12,20 @@ public class Ingredient implements Serializable, Parcelable {
         private String name;
         private String description;
 
+       ;
+
         public Ingredient(String name, String description) {
             this.name = name;
             this.description = description;
+
+
         }
+
 
     protected Ingredient(Parcel in) {
         name = in.readString();
         description = in.readString();
+
     }
 
     public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
@@ -52,6 +58,10 @@ public class Ingredient implements Serializable, Parcelable {
         parcel.writeString(name);
         parcel.writeString(description);
     }
+
+
+
+
 }
 
 
