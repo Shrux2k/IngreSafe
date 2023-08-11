@@ -6,6 +6,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".HomeActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="Home"
+        app:titleTextAppearance="@style/ToolbarTitleStyle"
+        android:paddingTop="20dp"
+        app:titleTextColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <FrameLayout
         android:id="@+id/container"
@@ -20,12 +31,6 @@
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="-2dp">
 
-
-        <Button
-            android:id="@+id/inserthere"
-            android:layout_width="115dp"
-            android:layout_height="78dp"
-            android:text="Test" />
 
     </FrameLayout>
 

@@ -20,6 +20,17 @@
         android:background="@color/white"
         app:menu="@menu/bottom_menu" />
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="Smart Ingredient Parser"
+        app:titleTextAppearance="@style/ToolbarTitleStyle"
+        android:paddingTop="20dp"
+        app:titleTextColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/text_data"
         android:layout_width="match_parent"

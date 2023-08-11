@@ -2,6 +2,7 @@ package com.example.ingredientparser;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,11 +36,11 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_home);
 
         firestore = FirebaseFirestore.getInstance();
 
-        insert = findViewById(R.id.inserthere);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -50,47 +51,25 @@ public class HomeActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.home) {
-                    startActivity(new Intent(getApplicationContext(),HomeActivity.class));
-                    overridePendingTransition(0,0);
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    overridePendingTransition(0, 0);
                     return true;
 
                 } else if (itemId == R.id.add) {
-                    startActivity(new Intent(getApplicationContext(),AddActivity.class));
-                    overridePendingTransition(0,0);
+                    startActivity(new Intent(getApplicationContext(), AddActivity.class));
+                    overridePendingTransition(0, 0);
                     return true;
 
-                } else if (itemId==R.id.info) {
-                    startActivity(new Intent(getApplicationContext(),InfoActivity.class));
-                    overridePendingTransition(0,0);
+                } else if (itemId == R.id.info) {
+                    startActivity(new Intent(getApplicationContext(), InfoActivity.class));
+                    overridePendingTransition(0, 0);
                     return true;
                 }
                 return false;
 
 
             }
-        });
 
-        insert.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Map<String, Object> Ingredients = new HashMap<>();
-                Ingredients.put("Allergen", "Y");
-                Ingredients.put("Description", "Deez nuts");
-                Ingredients.put("Name", "Peanuts");
-
-                firestore.collection("Ingredients").document("Peanuts").set(Ingredients).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "Failure", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
         });
     }
 }
