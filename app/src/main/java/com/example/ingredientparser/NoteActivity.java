@@ -126,6 +126,11 @@ public class NoteActivity extends AppCompatActivity {
             for (Ingredient ingredient : ingredientsList) {
                 IngredientGroup group = new IngredientGroup(ingredient.getName(), Arrays.asList(ingredient));
                 ingredientGroups.add(group);
+
+                System.out.println("Group: " + group.getTitle());
+                for (Ingredient child : group.getItems()) {
+                    System.out.println("Child: " + child.getName() + " - " + child.getDescription());
+                }
             }
 
             RecyclerView recyclerView = findViewById(R.id.expandableRecyclerView);

@@ -45,6 +45,7 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
         holder.setExpanded(group == expandedGroup); // Set the expansion state of the group
 
         boolean isAllergen = allergensList.contains(group.getTitle());
+        System.out.println("Group Title: " + group.getTitle() + " | Is Allergen: " + isAllergen);
         holder.setIngredientNameColor(isAllergen);
     }
 
@@ -75,6 +76,8 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
         void setIngredientName(ExpandableGroup group) {
             groupNameTextView.setText(group.getTitle());
             boolean isAllergen = allergensList.contains(group.getTitle());
+            System.out.println("Group Title: " + group.getTitle() + " | Is Allergen: " + isAllergen);
+
             potentialAllergenTextView.setVisibility(isAllergen ? View.VISIBLE : View.GONE);
         }
 

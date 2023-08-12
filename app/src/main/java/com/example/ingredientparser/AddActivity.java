@@ -1,57 +1,41 @@
 package com.example.ingredientparser;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-
-import com.google.android.material.navigation.NavigationBarView;
-import static android.content.ContentValues.TAG;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.WindowCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.LifecycleOwner;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.graphics.Rect;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
-import android.renderscript.ScriptGroup;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.vision.Frame;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.mlkit.vision.common.InputImage;
@@ -63,27 +47,27 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import androidx.exifinterface.media.ExifInterface;
 
-public class AddActivity extends AppCompatActivity {
-    Button button_capture;
-    //TextView textview_data;
+
+public class AddActivity extends AppCompatActivity implements ImageAnalysis.Analyzer, View.OnClickListener {
+    private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
+
+    PreviewView previewView;
+
+    Uri savedImageUri;
     Bitmap bitmap;
 
-    Button button_camera;
-
     Uri imageUri;
+    private ImageCapture imageCapture;
+    Button button_capture;
+
+    Button button_camera;
 
     FirebaseFirestore firestore;
 
@@ -102,12 +86,23 @@ public class AddActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_add);
 
-        button_capture = findViewById(R.id.button_capture);
+        previewView = findViewById(R.id.previewView);
         button_camera = findViewById(R.id.button_camera);
-        //textview_data = findViewById(R.id.text_data);
+        button_capture = findViewById(R.id.button_capture);
+
+        button_camera.setOnClickListener(this);
+
+        cameraProviderFuture = ProcessCameraProvider.getInstance(this);
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                startCameraX(cameraProvider);
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }, getExecutor());
 
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -138,52 +133,14 @@ public class AddActivity extends AppCompatActivity {
 
             }
         });
-        if (ContextCompat.checkSelfPermission(AddActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(AddActivity.this, new String[]{
-                    Manifest.permission.CAMERA
-            }, REQUEST_CAMERA_CODE);
-        }
 
         button_capture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(AddActivity.this);
 
-
             }
 
-        });
-        button_camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ContentValues values = new ContentValues();
-                values.put(MediaStore.Images.Media.TITLE, "Sample Title");
-                values.put(MediaStore.Images.Media.TITLE, "Sample Description");
-
-                imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                cameraActivityResultLauncher.launch(intent);
-
-                //CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(MainActivity.this);
-
-
-            }
-
-            private ActivityResultLauncher<Intent> cameraActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        flag = 1;
-                        CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(AddActivity.this);
-                    } else {
-                        Toast.makeText(AddActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-
-            });
         });
     }
 
@@ -195,13 +152,16 @@ public class AddActivity extends AppCompatActivity {
 
 
             if (flag == 1) {
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                if (resultCode == RESULT_OK) {
+                    Uri resultUri = result.getUri();
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
 
-                    getTextFromImage(bitmap);
+                        getTextFromImage(bitmap);
 
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             if (resultCode == RESULT_OK) {
@@ -214,38 +174,40 @@ public class AddActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-
             }
+
+
         }
     }
 
     private void getTextFromImage(Bitmap bitmap) {
+        if(flag==1)
+        {
+            // Assuming you have a Bitmap named 'bitmap'
+            Matrix matrix = new Matrix();
+            matrix.postRotate(-270); // Negative value for counterclockwise rotation
 
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+        }
         try {
             InputImage image = InputImage.fromBitmap(bitmap, 0);
             TextRecognizer recognizer =
                     TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
             Task<Text> result = recognizer.process(image)
-                    .addOnSuccessListener(new OnSuccessListener<Text>() {
-                        @Override
-                        public void onSuccess(Text text) {
-                             recognizedText = text.getText();
-                            //textview_data.setText(recognizedText);
+                    .addOnSuccessListener(text -> {
+
+                            recognizedText = text.getText();
                             System.out.println("Done");
                             processData(recognizedText);
 
-                            // ...
-                        }
                     })
                     .addOnFailureListener(
-                            new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    // Task failed with an exception
-                                    // ...
-                                    Toast.makeText(AddActivity.this, "Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
-                                    System.out.println("Failed");
-                                }
+                            e -> {
+                                // Task failed with an exception
+                                // ...
+                                Toast.makeText(AddActivity.this, "Failed" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                System.out.println("Failed");
                             });
         } catch (Exception e) {
             e.printStackTrace();
@@ -355,6 +317,89 @@ public class AddActivity extends AppCompatActivity {
             }
         });
     }
+
+    Executor getExecutor() {
+        return ContextCompat.getMainExecutor(this);
+    }
+
+    @NonNull
+    private void startCameraX(ProcessCameraProvider cameraProvider) {
+        cameraProvider.unbindAll();
+        CameraSelector cameraSelector = new CameraSelector.Builder()
+                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                .build();
+        Preview preview = new Preview.Builder()
+                .build();
+        preview.setSurfaceProvider(previewView.getSurfaceProvider());
+
+        // Image capture use case
+        imageCapture = new ImageCapture.Builder()
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                .build();
+
+        // Image analysis use case
+        ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build();
+
+        imageAnalysis.setAnalyzer(getExecutor(), this);
+
+        // Bind to lifecycle
+        cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, preview, imageCapture);
+    }
+
+    @Override
+    public void analyze(@NonNull ImageProxy image) {
+        // image processing here for the current frame
+        Log.d("TAG", "analyze: got the frame at: " + image.getImageInfo().getTimestamp());
+        image.close();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.button_camera) {
+            capturePhoto();
+        }
+    }
+
+    private void capturePhoto() {
+        long timestamp = System.currentTimeMillis();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, timestamp);
+        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+
+        imageCapture.takePicture(
+                new ImageCapture.OutputFileOptions.Builder(
+                        getContentResolver(),
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        contentValues
+                ).build(),
+                getExecutor(),
+                new ImageCapture.OnImageSavedCallback() {
+                    @Override
+                    public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                        savedImageUri = outputFileResults.getSavedUri();
+
+                        try {
+                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), savedImageUri);
+                            flag = 1;
+                            getTextFromImage(bitmap);
+
+
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                    }
+
+
+                    @Override
+                    public void onError(@NonNull ImageCaptureException exception) {
+                        Toast.makeText(AddActivity.this, "Error saving photo: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
 }
-
-

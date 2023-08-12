@@ -59,6 +59,14 @@ public class Ingredient implements Serializable, Parcelable {
         parcel.writeString(description);
     }
 
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
 
 
 
