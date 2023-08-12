@@ -9,22 +9,26 @@ import java.io.Serializable;
 
 public class Ingredient implements Serializable, Parcelable {
 
-        private String name;
-        private String description;
+    private String name;
+    private String description;
 
-       ;
+    private String emoji;
 
-        public Ingredient(String name, String description) {
-            this.name = name;
-            this.description = description;
+    ;
+
+    public Ingredient(String name, String description,String emoji) {
+        this.name = name;
+        this.description = description;
+        this.emoji = emoji;
 
 
-        }
+    }
 
 
     protected Ingredient(Parcel in) {
         name = in.readString();
         description = in.readString();
+        emoji = in.readString();
 
     }
 
@@ -41,12 +45,16 @@ public class Ingredient implements Serializable, Parcelable {
     };
 
     public String getName() {
-            return name;
-        }
+        return name;
+    }
 
-        public String getDescription() {
-            return description;
-        }
+    public String getDescription() {
+        return description;
+    }
+
+    public String getEmoji() {
+        return emoji;
+    }
 
     @Override
     public int describeContents() {
@@ -57,13 +65,14 @@ public class Ingredient implements Serializable, Parcelable {
     public void writeToParcel(@NonNull Parcel parcel, int i) {
         parcel.writeString(name);
         parcel.writeString(description);
+        parcel.writeString(emoji);
     }
 
     @Override
     public String toString() {
         return "Ingredient{" +
                 "name='" + name + '\'' +
-                ", description='" + description + '\'' +
+                ", description='" + description + '\'' + ", Emoji='"+emoji+ '\''+
                 '}';
     }
 
@@ -71,5 +80,6 @@ public class Ingredient implements Serializable, Parcelable {
 
 
 }
+
 
 

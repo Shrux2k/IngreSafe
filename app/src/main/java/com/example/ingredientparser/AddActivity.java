@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -89,7 +90,6 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-
 
         previewView = findViewById(R.id.previewView);
         button_camera = findViewById(R.id.button_camera);
@@ -200,9 +200,9 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
             Task<Text> result = recognizer.process(image)
                     .addOnSuccessListener(text -> {
 
-                            recognizedText = text.getText();
-                            System.out.println("Done");
-                            processData(recognizedText);
+                        recognizedText = text.getText();
+                        System.out.println("Done");
+                        processData(recognizedText);
 
                     })
                     .addOnFailureListener(
@@ -289,9 +289,10 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
                         // Get the data from each document
                         String ingredientName = documentSnapshot.getString("Name");
                         String description = documentSnapshot.getString("Description");
+                        String emoji = documentSnapshot.getString("Emoji");
                         if (ingredientNameToRetrieve.equals(ingredientName))
                         {
-                            Ingredient ingredient = new Ingredient(ingredientName, description);
+                            Ingredient ingredient = new Ingredient(ingredientName, description,emoji);
                             ingredientsList.add(ingredient);
                             //ingredientsList.add(ingredientName + ": " + description);
                         }
@@ -308,10 +309,17 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
                 }
 
                 if(!ingredientList.isEmpty()) {
+                    ProgressBar progressBar = findViewById(R.id.progressBarAdd);
+
+                    progressBar.setVisibility(View.VISIBLE);
+
                     Intent intent = new Intent(AddActivity.this, NoteActivity.class);
                     intent.putExtra("INGREDIENTS_LIST", (Serializable) ingredientsList);
                     intent.putExtra("RECOGNIZED_TEXT", recognizedText);
                     startActivity(intent);
+
+                    progressBar.setVisibility(View.INVISIBLE);
+
 
                 }
                 else
@@ -414,3 +422,4 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
         );
     }
 }
+

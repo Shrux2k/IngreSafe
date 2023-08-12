@@ -48,7 +48,8 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
 
     @Override
     public void onBindGroupViewHolder(IngredientViewHolder holder, int flatPosition, ExpandableGroup group) {
-        holder.setIngredientName(group);
+        //holder.setIngredientName(group);
+        holder.setIngredientName(group, ((IngredientGroup) group).getItems().get(0).getEmoji()); // Extract emoji from the first child of the group
         holder.setExpanded(group == expandedGroup); // Set the expansion state of the group
 
         boolean isAllergen = allergensList.contains(group.getTitle());
@@ -69,7 +70,6 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
         private TextView potentialAllergenTextView;
         private TextView potentialVeganTextView; // Add the potentialVeganTextView
 
-
         private View arrow;
 
         private List<String> allergensList;
@@ -85,11 +85,12 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
             this.allergensList = allergensList;
         }
 
-        void setIngredientName(ExpandableGroup group) {
-            groupNameTextView.setText(group.getTitle());
+        void setIngredientName(ExpandableGroup group, String emoji) {
+            groupNameTextView.setText(group.getTitle()+"   "+emoji);
             boolean isAllergen = allergensList.contains(group.getTitle());
             System.out.println("Group Title: " + group.getTitle() + " | Is Allergen: " + isAllergen);
-
+            //String tempEmoji =  "\uD83E\uDD6C";
+            //emojiTextView.setText(emoji); // Set the emoji
             potentialAllergenTextView.setVisibility(isAllergen ? View.VISIBLE : View.GONE);
         }
 
@@ -139,4 +140,3 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
         expandedGroup = group;
     }
 }
-

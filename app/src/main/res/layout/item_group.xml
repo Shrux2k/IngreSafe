@@ -24,6 +24,7 @@
             android:textSize="16sp"
             android:padding="8dp"/>
 
+
         <TextView
             android:id="@+id/potentialAllergenTextView"
             android:layout_width="wrap_content"

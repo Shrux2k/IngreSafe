@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 
 import androidx.core.view.WindowCompat;
+import androidx.emoji.text.EmojiCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,6 +53,11 @@ public class NoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_note);
+
+
+
+        ProgressBar progressBar = findViewById(R.id.progressBarNote);
+        progressBar.setVisibility(View.INVISIBLE);
 
         allergensList = new ArrayList<>();
         allergensList.add("Milk");
@@ -168,7 +175,7 @@ public class NoteActivity extends AppCompatActivity {
 
                 System.out.println("Group: " + group.getTitle());
                 for (Ingredient child : group.getItems()) {
-                    System.out.println("Child: " + child.getName() + " - " + child.getDescription());
+                    System.out.println("Child: " + child.getName() + " - " + child.getDescription()+" - "+child.getEmoji());
                 }
             }
 
@@ -194,3 +201,4 @@ public class NoteActivity extends AppCompatActivity {
 
 
 }
+
