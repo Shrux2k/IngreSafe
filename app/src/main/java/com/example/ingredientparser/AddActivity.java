@@ -12,6 +12,7 @@ import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import android.Manifest;
@@ -87,6 +88,8 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
 
         previewView = findViewById(R.id.previewView);
         button_camera = findViewById(R.id.button_camera);
@@ -236,7 +239,15 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
             String[] words = ingredientsString.split(",");
 
             for (int i = 0; i < words.length; i++) {
-                words[i] = words[i].trim();
+                if(words[i].contains("Milk"))
+                {
+                    words[i] = "Milk";
+                } else if (words[i].contains("Wheat")) {
+                    words[i] = "Wheat";
+                }
+                else {
+                    words[i] = words[i].trim();
+                }
             }
 
             ArrayList<String> ingredientList = new ArrayList<>();

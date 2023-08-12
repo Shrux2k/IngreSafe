@@ -1,11 +1,14 @@
 package com.example.ingredientparser;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import com.example.ingredientparser.IngredientGroup;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +22,15 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
     private IngredientGroup expandedGroup = null; // Variable to keep track of the currently expanded group
 
     private List<String> allergensList;
+    private List<String> veganList;
 
 
-    public IngredientAdapter(List<? extends ExpandableGroup> groups, List<String> allergensList) {
+
+    public IngredientAdapter(List<? extends ExpandableGroup> groups, List<String> allergensList,List<String> veganList) {
         super(groups);
         this.allergensList = allergensList;
+        this.veganList = veganList;
+
 
     }
 
@@ -45,8 +52,10 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
         holder.setExpanded(group == expandedGroup); // Set the expansion state of the group
 
         boolean isAllergen = allergensList.contains(group.getTitle());
+        boolean isVegan = veganList.contains(group.getTitle());
+
         System.out.println("Group Title: " + group.getTitle() + " | Is Allergen: " + isAllergen);
-        holder.setIngredientNameColor(isAllergen);
+        holder.setIngredientNameColor(isAllergen,isVegan);
     }
 
     @Override
@@ -58,6 +67,8 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
     static class IngredientViewHolder extends GroupViewHolder {
         private TextView groupNameTextView;
         private TextView potentialAllergenTextView;
+        private TextView potentialVeganTextView; // Add the potentialVeganTextView
+
 
         private View arrow;
 
@@ -69,6 +80,7 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
             super(itemView);
             groupNameTextView = itemView.findViewById(R.id.groupNameTextView);
             potentialAllergenTextView = itemView.findViewById(R.id.potentialAllergenTextView);
+            potentialVeganTextView = itemView.findViewById(R.id.potentialVeganTextView);
             arrow = itemView.findViewById(R.id.arrow);
             this.allergensList = allergensList;
         }
@@ -85,9 +97,24 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
             arrow.setRotation(isExpanded ? 180 : 0); // Rotate the arrow icon based on the expansion state
         }
 
-        void setIngredientNameColor(boolean isAllergen) {
+        void setIngredientNameColor(boolean isAllergen, boolean isVegan) {
             // Set the text color of the ingredient name based on whether it's an allergen or not
-            int color = isAllergen ? Color.RED : Color.BLACK;
+            int color;
+            if (isAllergen) {
+                color = Color.RED; // Set color for allergens
+                potentialAllergenTextView.setVisibility(View.VISIBLE);
+                potentialVeganTextView.setVisibility(View.GONE); // Hide potentialVeganTextView
+            } else if (isVegan) {
+                color = Color.parseColor("#FF8800");
+                potentialVeganTextView.setVisibility(View.VISIBLE); // Show potentialVeganTextView
+                //groupNameTextView.setText("Vegan ingredient: " + groupNameTextView.getText()); // Add label for vegan ingredients
+                potentialAllergenTextView.setVisibility(View.GONE); // Hide potentialAllergenTextView
+            } else {
+                color = Color.BLACK;
+                potentialAllergenTextView.setVisibility(View.GONE);
+                potentialVeganTextView.setVisibility(View.GONE); // Hide potentialVeganTextView
+            }
+
             groupNameTextView.setTextColor(color);
         }
     }
@@ -112,3 +139,4 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
         expandedGroup = group;
     }
 }
+

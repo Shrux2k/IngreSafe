@@ -33,6 +33,15 @@
             android:text="(Potential Allergen)"
             android:visibility="gone" /> <!-- Initially hidden, will be shown if it's an allergen -->
 
+        <TextView
+            android:id="@+id/potentialVeganTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@android:color/holo_orange_dark"
+            android:text="(Non Vegan)"
+            android:visibility="gone" /> <!-- Initially hidden, will be shown if it's an allergen -->
+
     </LinearLayout>
 
     <!-- Add any other views you want for the group here -->

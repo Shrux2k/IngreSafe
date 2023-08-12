@@ -10,6 +10,7 @@
     <color name="lavender">#8692f7</color>
     <color name="allergenColor">#FF0000</color>
     <color name="gray">#575757</color>
+    <color name="Orange">#FFA500</color>
     <!-- Focused EditText Background Color -->
     <color name="focusedEditTextBackground">#F2F2F2</color>
 
