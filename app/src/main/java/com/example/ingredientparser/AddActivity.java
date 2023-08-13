@@ -2,6 +2,7 @@ package com.example.ingredientparser;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
@@ -25,10 +26,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -90,6 +93,8 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        showCustomDialog();
+
 
         previewView = findViewById(R.id.previewView);
         button_camera = findViewById(R.id.button_camera);
@@ -146,6 +151,35 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
 
         });
     }
+
+    private void showCustomDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_layout, null);
+
+        TextView dialogText = dialogView.findViewById(R.id.dialogText);
+        TextView dialogContent = dialogView.findViewById(R.id.dialogContent);
+        Button dismissButton = dialogView.findViewById(R.id.dismissButton);
+
+        dialogText.setText("⚠️ Always Double Check ⚠️  \n");
+        dialogContent.setText("This is an informational tool that helps you check for ingredients, it might not be 100% accurate.\n\nALWAYS double check the packaging before consuming a product if you're allergic or intolerant.\n\nI understand that I should always double check the packaging and can't fully rely on this app.");
+
+        dialogView.setBackgroundResource(R.drawable.rounded_dialog_background);
+
+        builder.setView(dialogView);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

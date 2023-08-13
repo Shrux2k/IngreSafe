@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+<TextView
+android:id="@+id/dialogText"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:textSize="20sp"
+android:textColor="@android:color/black"
+android:layout_gravity="center_horizontal"
+android:text="⚠️ Always double check!"/>
+
+<TextView
+android:id="@+id/dialogContent"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:textSize="16sp"
+android:textColor="@android:color/black"
+android:layout_gravity="center_horizontal"
+android:text="This is an informational tool that helps you check for ingredients, it might not be 100% accurate.\nALWAYS double check the packaging before consuming a product if you're allergic or intolerant.\n\nI understand that I should always double check the packaging and can't fully rely on this app."/>
+
+<Button
+android:id="@+id/dismissButton"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Dismiss"
+android:layout_gravity="center_horizontal"
+android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
