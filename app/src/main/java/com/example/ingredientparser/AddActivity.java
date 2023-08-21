@@ -1,5 +1,7 @@
 package com.example.ingredientparser;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -19,6 +21,7 @@ import androidx.lifecycle.LifecycleOwner;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -77,6 +80,11 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
     FirebaseFirestore firestore;
 
     List<String> list = new ArrayList<>();
+    List<String> unhealthyIng = new ArrayList<>();
+
+
+
+    int counter;
 
 
 
@@ -88,12 +96,17 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
 
     BottomNavigationView bottomNavigationView;
 
+    SharedPreferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         showCustomDialog();
+
+        preferences = getSharedPreferences("CounterPrefs", MODE_PRIVATE);
+        counter = preferences.getInt("counter", 0);
 
 
         previewView = findViewById(R.id.previewView);
@@ -123,7 +136,7 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
                 int itemId = item.getItemId();
                 if (itemId == R.id.home) {
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                    overridePendingTransition(0, 0);
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                     return true;
 
                 } else if (itemId == R.id.add) {
@@ -133,7 +146,7 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
 
                 } else if (itemId == R.id.info) {
                     startActivity(new Intent(getApplicationContext(), InfoActivity.class));
-                    overridePendingTransition(0, 0);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     return true;
                 }
                 return false;
@@ -279,6 +292,40 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
                 } else if (words[i].contains("Wheat")) {
                     words[i] = "Wheat";
                 }
+                else if (words[i].contains("Humectant")) {
+                    words[i] = "Glycerol";
+                }
+                else if (words[i].contains("Raising Agents")) {
+                    words[i] = "Raising Agents";
+                }
+                else if (words[i].contains("Stabilisers")) {
+                    words[i] = "Stabilisers";
+                }
+                else if (words[i].contains("Malt Vinegar")) {
+                    words[i] = "Malt Vinegar";
+                }
+                else if (words[i].contains("Pectin")) {
+                    words[i] = "Pectin";
+                }
+                else if (words[i].contains("Mustard Seed")) {
+                    words[i] = "Mustard Seed";
+                }
+                else if (words[i].contains("Sunflower")) {
+                    words[i] = "Sunflower Oil";
+                }
+                else if (words[i].contains("Garlic Powder")) {
+                    words[i] = "Garlic Powder";
+                }
+                else if (words[i].contains("Barley")) {
+                    words[i] = "Barley";
+                }
+                else if(words[i].contains("Egg"))
+                {
+                    words[i] = "Egg";
+                }
+
+
+
                 else {
                     words[i] = words[i].trim();
                 }
@@ -316,6 +363,7 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<Ingredient> ingredientsList = new ArrayList<>();
+                List<String> unhealthy = new ArrayList<>();
                 for (int i = 0; i < ingredientList.size(); i++) {
                     String ingredientNameToRetrieve = ingredientList.get(i);
 
@@ -324,19 +372,40 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
                         String ingredientName = documentSnapshot.getString("Name");
                         String description = documentSnapshot.getString("Description");
                         String emoji = documentSnapshot.getString("Emoji");
+                        String health = documentSnapshot.getString("Health");
                         if (ingredientNameToRetrieve.equals(ingredientName))
                         {
+                            try {
+
+
+                                if (health.equals("U")) {
+                                    unhealthy.add(ingredientName);
+                                } else {
+                                    counter++;
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putInt("counter", counter);
+                                    editor.apply();
+                                }
+                            }catch (Exception e)
+                            {
+                                Log.d(TAG, "Exception "+e);
+                            }
+
                             Ingredient ingredient = new Ingredient(ingredientName, description,emoji);
                             ingredientsList.add(ingredient);
-                            //ingredientsList.add(ingredientName + ": " + description);
                         }
                     }
+                }
+                System.out.println("========== UNHEALTHY INGREDIENTS ==========");
+                for (int i = 0; i < unhealthy.size(); i++) {
+                    System.out.println(unhealthy.get(i));
                 }
 
 
 
                 // Now the ingredientsList is populated with data, you can use it here or pass it to another method for further processing
                 list = ingredientList;
+                unhealthyIng = unhealthy;
                 System.out.println("Ingredients with their descriptions");
                 for (int i = 0; i < ingredientsList.size(); i++) {
                     System.out.println(ingredientsList.get(i));
@@ -350,7 +419,10 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
                     Intent intent = new Intent(AddActivity.this, NoteActivity.class);
                     intent.putExtra("INGREDIENTS_LIST", (Serializable) ingredientsList);
                     intent.putExtra("RECOGNIZED_TEXT", recognizedText);
+                    intent.putStringArrayListExtra("UNHEALTHY", (ArrayList<String>) unhealthyIng);
+                    intent.putExtra("COUNT", counter);
                     startActivity(intent);
+
 
                     progressBar.setVisibility(View.INVISIBLE);
 

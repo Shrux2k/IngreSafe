@@ -27,7 +27,7 @@
             android:layout_marginStart="1dp"
             android:layout_marginTop="5dp"
             android:padding="8dp"
-            android:text="Allergens"
+            android:text="Unhealthy Ingredients"
             android:textAlignment="viewStart"
             android:textColor="@color/black"
             android:textSize="25dp" />
@@ -43,22 +43,12 @@
             android:textColor="@color/black"
             android:textSize="16dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="5dp"
-            android:padding="8dp"
-            android:text="🌾🥛Gluten and Dairy Products"
-            android:textStyle="bold"
-            android:textAlignment="viewStart"
-            android:textColor="@color/black"
-            android:textSize="16dp" />
+
 
     </LinearLayout>
 
     <com.example.ingredientparser.FlowLayout
-        android:id="@+id/flowLayoutAllergens"
+        android:id="@+id/flowLayoutUnhealthy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

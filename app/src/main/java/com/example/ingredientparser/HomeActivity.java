@@ -1,50 +1,50 @@
+
 package com.example.ingredientparser;
 
-import androidx.annotation.NonNull;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.MenuItem;
+import android.widget.Switch;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-
-import java.util.HashMap;
-import java.util.Map;
-
 
 public class HomeActivity extends AppCompatActivity {
 
+    private Switch veganSwitch;
+    private SharedPreferences preferences;
+
     BottomNavigationView bottomNavigationView;
 
-    Button insert;
-
-    FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_home);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-        firestore = FirebaseFirestore.getInstance();
+
+        veganSwitch = findViewById(R.id.veganSwitch);
+        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        //SharedPreferences.Editor editor = preferences.edit();
+        boolean isVeganSwitchActivated = preferences.getBoolean("veganSwitch", false);
+        veganSwitch.setChecked(isVeganSwitchActivated);
+
+        veganSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            //editor.putBoolean("veganSwitch", isChecked);
+            //editor.apply();
+            preferences.edit().putBoolean("veganSwitch", isChecked).apply();
+        });
 
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        bottomNavigationView.setSelectedItemId(R.id.home);
+        bottomNavigationView.setSelectedItemId(R.id.add);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -52,12 +52,12 @@ public class HomeActivity extends AppCompatActivity {
                 int itemId = item.getItemId();
                 if (itemId == R.id.home) {
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                    overridePendingTransition(0, 0);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     return true;
 
                 } else if (itemId == R.id.add) {
                     startActivity(new Intent(getApplicationContext(), AddActivity.class));
-                    overridePendingTransition(0, 0);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     return true;
 
                 } else if (itemId == R.id.info) {
@@ -69,10 +69,10 @@ public class HomeActivity extends AppCompatActivity {
 
 
             }
-
         });
     }
 }
+
 
 
 

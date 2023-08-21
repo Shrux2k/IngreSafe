@@ -43,8 +43,6 @@ public class HealthActivity extends AppCompatActivity {
         recognizedText = String.join(" ", recognizedText.split("\n+"));
         apiCall();
 
-
-        textView = findViewById(R.id.textView);
     }
 
     public void apiCall(){
@@ -81,7 +79,6 @@ public class HealthActivity extends AppCompatActivity {
                 }
 
                 stringOutput = stringOutput + stringText;
-                textView.setText(stringOutput);
             }
         }, new Response.ErrorListener() {
             @Override

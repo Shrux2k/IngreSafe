@@ -12,24 +12,14 @@
         android:background="?attr/colorPrimary"
         android:paddingTop="20dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="User Preferences"
+        app:title="USER SETTINGS"
         app:titleTextAppearance="@style/ToolbarTitleStyle"
         app:titleTextColor="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <Switch
-        android:id="@+id/veganSwitch"
-        android:layout_width="114dp"
-        android:layout_height="45dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:checked="false"
-        android:text="Vegan"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
