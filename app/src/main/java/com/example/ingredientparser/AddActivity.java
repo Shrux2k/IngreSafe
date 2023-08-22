@@ -380,12 +380,9 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
 
                                 if (health.equals("U")) {
                                     unhealthy.add(ingredientName);
-                                } else {
-                                    counter++;
-                                    SharedPreferences.Editor editor = preferences.edit();
-                                    editor.putInt("counter", counter);
-                                    editor.apply();
                                 }
+
+
                             }catch (Exception e)
                             {
                                 Log.d(TAG, "Exception "+e);
@@ -415,6 +412,12 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
                     ProgressBar progressBar = findViewById(R.id.progressBarAdd);
 
                     progressBar.setVisibility(View.VISIBLE);
+
+                    counter++;
+                    System.out.println("Counter value is:"+ counter);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putInt("counter", counter);
+                    editor.apply();
 
                     Intent intent = new Intent(AddActivity.this, NoteActivity.class);
                     intent.putExtra("INGREDIENTS_LIST", (Serializable) ingredientsList);

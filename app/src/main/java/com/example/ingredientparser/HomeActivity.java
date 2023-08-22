@@ -1,12 +1,16 @@
 
 package com.example.ingredientparser;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
@@ -19,6 +23,14 @@ public class HomeActivity extends AppCompatActivity {
     private Switch veganSwitch;
     private SharedPreferences preferences;
 
+    private ImageView badgeImageView;
+    private int scanCount;
+
+    int remScans;
+
+    int totalCount = 0;
+
+
     BottomNavigationView bottomNavigationView;
 
 
@@ -27,6 +39,9 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        TextView scanCountView = findViewById(R.id.scanCountView);
+        TextView remScansView = findViewById(R.id.remainingScans);
 
 
         veganSwitch = findViewById(R.id.veganSwitch);
@@ -40,6 +55,21 @@ public class HomeActivity extends AppCompatActivity {
             //editor.apply();
             preferences.edit().putBoolean("veganSwitch", isChecked).apply();
         });
+
+        badgeImageView = findViewById(R.id.badgeImageView);
+        loadScanCount(); // Load the scan count from SharedPreferences
+
+
+        updateBadge(); // Update the badge based on the loaded scan count
+        String scan = "Total Scans : " + scanCount+"/"+totalCount;
+        scanCountView.setText(scan);
+        remScans = totalCount-scanCount;
+        remScansView.setText(remScans+" scans left to unlock the next badge");
+
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+        ObjectAnimator.ofInt(progressBar, "progress", 0, scanCount)
+                .setDuration(1000) // Animation duration in milliseconds
+                .start();
 
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -70,6 +100,26 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void loadScanCount()
+    {
+        SharedPreferences preferences = getSharedPreferences("CounterPrefs", MODE_PRIVATE);
+        scanCount = preferences.getInt("counter", 0);
+
+    }
+
+    private void updateBadge() {
+        if (scanCount >= 300) {
+            badgeImageView.setImageResource(R.drawable.expert_foodie);
+            totalCount = 10000;
+        } else if (scanCount >= 100) {
+            badgeImageView.setImageResource(R.drawable.beginner_foodie);
+            totalCount = 300;
+        } else {
+            badgeImageView.setImageResource(R.drawable.novice_foodie);
+            totalCount = 100;
+        }
     }
 }
 
