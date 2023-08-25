@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -19,116 +18,212 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Adjust vertical_bias as needed -->
 
-    <TextView
-        android:layout_width="198dp"
-        android:layout_height="77dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="132dp"
-        android:fontFamily="sans-serif"
-        android:text="Hi, there! \nHere's your progress"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!-- Top half layout with black background -->
 
+    <!-- Guideline to separate the top and bottom halves -->
 
-
-    <TextView
-        android:layout_width="297dp"
-        android:layout_height="71dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="192dp"
-        android:fontFamily="sans-serif"
-        android:text="Scan more to unlock the next Badge"
-        android:textSize="12dp"
-        android:textStyle="italic"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/badgeImageView"
-        android:layout_width="144dp"
-        android:layout_height="129dp"
-        android:layout_marginTop="88dp"
-        android:contentDescription="User Badge"
-        android:src="@drawable/novice_foodie"
+    <LinearLayout
+        android:id="@+id/topHalfLayout"
+        android:layout_width="368dp"
+        android:layout_height="294dp"
+        android:layout_marginStart="-40dp"
+        android:layout_marginTop="85dp"
+        android:layout_marginEnd="-15dp"
+        android:background="@drawable/rounded_black_background"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.94"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="379dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="8dp"
-        android:max="100"
-        android:progress="0"
-        android:progressDrawable="@drawable/progress_bar_black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/badgeImageView" />
+        <TextView
+            android:layout_width="198dp"
+            android:layout_height="77dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="50dp"
+            android:fontFamily="sans-serif"
+            android:text="Hi, there! \nHere's your progress"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/scanCountView"
-        android:layout_width="140dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="Scans"
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="336dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-210dp"
+            android:layout_marginLeft="-220dp"
+            android:layout_marginTop="200dp"
+            android:max="100"
+            android:progress="50"
+            android:progressDrawable="@drawable/progress_bar_black" />
+
+
+        <ImageView
+            android:id="@+id/badgeImageView"
+            android:layout_width="144dp"
+            android:layout_height="121dp"
+            android:layout_marginLeft="-135dp"
+            android:layout_marginTop="30dp"
+            android:contentDescription="User Badge"
+            android:src="@drawable/novice_foodie"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.94"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/scanCountView"
+            android:layout_width="146dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="-150dp"
+            android:layout_marginTop="25dp"
+            android:gravity="center"
+            android:text="Scans"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/remainingScans"
+            android:layout_width="301dp"
+            android:layout_height="17dp"
+            android:layout_marginStart="-330dp"
+            android:layout_marginLeft="-320dp"
+            android:layout_marginTop="220dp"
+            android:gravity="center"
+            android:text="95 scans to beginner_scanner"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:layout_width="297dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="-310dp"
+            android:layout_marginTop="110dp"
+            android:fontFamily="sans-serif"
+            android:text="Scan more to unlock the next Badge"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            android:textStyle="italic" />
+
+
+        <!-- Add your content for the top half here -->
+        <!-- This is where you can place your text views, images, etc. -->
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="375dp" />
+
+    <!-- Rest of your views for the bottom half -->
+
+
+    <LinearLayout
+        android:layout_width="363dp"
+        android:layout_height="383dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/bottom_black_cardview"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.937"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/badgeImageView"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@id/guideline">
 
-    <!-- Badge Preview ImageView -->
 
-    <TextView
-        android:id="@+id/remainingScans"
-        android:layout_width="287dp"
-        android:layout_height="17dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="95 scans to beginner_scanner"
-        android:textColor="#000000"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+        <Switch
+            android:id="@+id/veganSwitch"
+            android:layout_width="114dp"
+            android:layout_height="66dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="300dp"
+            android:checked="false"
+            android:text="Vegan"
+            android:textSize="18sp" />
 
-    <ImageView
-        android:id="@+id/badgePreview"
-        android:layout_width="42dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="64dp"
-        android:src="@drawable/beginner_foodie"
-        app:layout_constraintBottom_toBottomOf="@+id/remainingScans"
-        app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageView
-        android:id="@+id/badgePreview2"
-        android:layout_width="38dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/expert_foodie"
-        app:layout_constraintBottom_toBottomOf="@+id/remainingScans"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <androidx.cardview.widget.CardView
+            style="@style/CardView.allergy"
+            android:layout_width="166dp"
+            android:layout_height="102dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="-132dp"
+            android:layout_marginTop="-100dp"
+            app:cardBackgroundColor="#00FF00"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true"></androidx.cardview.widget.CardView>
 
-    <Switch
-        android:id="@+id/veganSwitch"
-        android:layout_width="114dp"
-        android:layout_height="66dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="312dp"
-        android:checked="false"
-        android:text="Vegan"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        <androidx.cardview.widget.CardView
+            style="@style/CardView.vegan"
+            android:layout_width="166dp"
+            android:layout_height="102dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="-100dp"
+            app:cardBackgroundColor="#00FF00"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+
+            <!-- Your content inside the CardView goes here -->
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/CardView.pregnant"
+            android:layout_width="166dp"
+            android:layout_height="102dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="-332dp"
+            android:layout_marginTop="0dp"
+            app:cardBackgroundColor="#00FF00"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+
+            <!-- Your content inside the CardView goes here -->
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/CardView.custom"
+            android:layout_width="166dp"
+            android:layout_height="102dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            app:cardBackgroundColor="#00FF00"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+
+            <!-- Your content inside the CardView goes here -->
+
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+            android:layout_width="108dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="-350dp"
+            android:layout_marginTop="0dp"
+            android:text="Categories"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -136,9 +231,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
-        app:menu="@menu/bottom_menu"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_menu" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,18 @@
+<!-- rounded_black_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bottom half: black background with rounded corners -->
+    <item
+        android:top="-16dp"
+        android:right="0dp"
+        android:left="0dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#000000" /> <!-- Set the color to black (#000000) -->
+            <corners
+                android:topLeftRadius="25dp"
+                android:topRightRadius="25dp"
+                android:bottomLeftRadius="0dp"
+                android:bottomRightRadius="0dp"
+                />
+        </shape>
+    </item>
+</layer-list>

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
@@ -43,6 +44,7 @@ public class HomeActivity extends AppCompatActivity {
         TextView scanCountView = findViewById(R.id.scanCountView);
         TextView remScansView = findViewById(R.id.remainingScans);
 
+        ImageView imageView = findViewById(R.id.badgeImageView);
 
         veganSwitch = findViewById(R.id.veganSwitch);
         SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
@@ -71,6 +73,14 @@ public class HomeActivity extends AppCompatActivity {
                 .setDuration(1000) // Animation duration in milliseconds
                 .start();
 
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            Intent intent = new Intent(HomeActivity.this, BadgeDisplay.class);
+            startActivity(intent);
+
+            }
+        });
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -110,12 +120,17 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void updateBadge() {
-        if (scanCount >= 300) {
+        if (scanCount >= 500) {
             badgeImageView.setImageResource(R.drawable.expert_foodie);
+            totalCount = 500;
+        }else if (scanCount>=1000)
+        {
+            badgeImageView.setImageResource(R.drawable.master_foodie);
             totalCount = 10000;
-        } else if (scanCount >= 100) {
+        }
+        else if (scanCount >= 100) {
             badgeImageView.setImageResource(R.drawable.beginner_foodie);
-            totalCount = 300;
+            totalCount = 500;
         } else {
             badgeImageView.setImageResource(R.drawable.novice_foodie);
             totalCount = 100;

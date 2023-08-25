@@ -36,4 +36,22 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
+    
+    <style name="CardView.vegan" parent = "CardView">
+        <item name = "android:foreground">@drawable/vegan_cardview</item>
+    </style>
+
+    <style name="CardView.allergy" parent = "CardView">
+        <item name = "android:foreground">@drawable/allergy_cardview</item>
+    </style>
+
+    <style name="CardView.pregnant" parent = "CardView">
+        <item name = "android:foreground">@drawable/pregnant_cardview</item>
+    </style>
+
+    <style name="CardView.custom" parent = "CardView">
+        <item name = "android:foreground">@drawable/custom_cardview</item>
+    </style>
+
+
 </resources>
