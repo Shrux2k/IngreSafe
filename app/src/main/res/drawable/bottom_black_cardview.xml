@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Bottom half: black background with rounded corners -->
     <item
-        android:top="-16dp"
+        android:bottom="-16dp"
         android:right="0dp"
         android:left="0dp">
         <shape android:shape="rectangle">
