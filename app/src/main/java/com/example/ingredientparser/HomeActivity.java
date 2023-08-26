@@ -14,14 +14,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.WindowCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class HomeActivity extends AppCompatActivity {
 
     private Switch veganSwitch;
+
     private SharedPreferences preferences;
 
     private ImageView badgeImageView;
@@ -43,6 +46,7 @@ public class HomeActivity extends AppCompatActivity {
 
         TextView scanCountView = findViewById(R.id.scanCountView);
         TextView remScansView = findViewById(R.id.remainingScans);
+
 
         ImageView imageView = findViewById(R.id.badgeImageView);
 
@@ -82,6 +86,42 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        CardView cardViewAllergy = findViewById(R.id.cardViewAllergy);
+
+        cardViewAllergy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(HomeActivity.this, AllergyHomeActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        CardView cardViewVegan = findViewById(R.id.cardViewVegan);
+
+        cardViewVegan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(HomeActivity.this, VeganHomeActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        CardView cardViewEnvironment = findViewById(R.id.cardViewEnv);
+        cardViewEnvironment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(HomeActivity.this, EnvironmentHomeActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setSelectedItemId(R.id.add);
@@ -111,6 +151,8 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void loadScanCount()
     {

@@ -2,7 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/black">
 
 <ScrollView
     android:layout_width="match_parent"
@@ -167,6 +168,8 @@
             app:cardBackgroundColor="#ff5050"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
+
+            android:id="@+id/cardViewAllergy"
             app:cardUseCompatPadding="true"
             android:padding="16dp">
 
@@ -185,9 +188,10 @@
             android:layout_width="166dp"
             android:layout_height="102dp"
             android:layout_gravity="center_vertical"
+            android:id="@+id/cardViewVegan"
             android:layout_marginLeft="0dp"
             android:layout_marginTop="-100dp"
-            app:cardBackgroundColor="#026A3D"
+            app:cardBackgroundColor="#039588"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
             app:cardUseCompatPadding="true">
@@ -207,12 +211,13 @@
 
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewEnv"
             android:layout_width="166dp"
             android:layout_height="102dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="-332dp"
             android:layout_marginTop="0dp"
-            app:cardBackgroundColor="#6699ff"
+            app:cardBackgroundColor="#4A84A8"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
             app:cardUseCompatPadding="true">
@@ -235,7 +240,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="0dp"
             android:layout_marginTop="0dp"
-            app:cardBackgroundColor="#009999"
+            app:cardBackgroundColor="#673bb8"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
             app:cardUseCompatPadding="true">
@@ -261,7 +266,7 @@
             android:layout_marginLeft="-342dp"
             android:layout_marginTop="0dp"
             android:text="Categories"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="20dp"
             android:textStyle="bold" />
 
@@ -290,4 +295,7 @@
         android:background="@color/white"
         app:menu="@menu/bottom_menu" />
 
+
+
 </RelativeLayout>
+

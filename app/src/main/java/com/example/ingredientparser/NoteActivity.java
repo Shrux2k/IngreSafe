@@ -76,21 +76,11 @@ public class NoteActivity extends AppCompatActivity {
         progressBar.setVisibility(View.INVISIBLE);
 
         allergensList = new ArrayList<>();
-        allergensList.add("Milk");
-        allergensList.add("Egg");
-        allergensList.add("Peanuts");
-        allergensList.add("Tree Nuts");
-        allergensList.add("Fish");
-        allergensList.add("Wheat");
-        allergensList.add("Soy");
+
         allergensList.add("Sesame");
         allergensList.add("Mustard");
-        allergensList.add("Crème Fraîche Milk");
-        allergensList.add("Soya Bean");
-        allergensList.add("Pasteurised Egg Yolk");
-        allergensList.add("Barley Malt Extract");
         allergensList.add("Mustard Seed");
-        allergensList.add("Barley");
+
 
 
         veganList = new ArrayList<>();
@@ -131,48 +121,127 @@ public class NoteActivity extends AppCompatActivity {
 
             }
         });
-
-        //Button button = findViewById(R.id.button);
-
-        // Set an OnClickListener for the button
-        /*button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // This code will execute when the button is clicked
-                // You can add your logic here
-                analysebutton(); // Call the method you specified in android:onClick
-            }
-        });*/
-
+        //Allergen check
         SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        boolean isVeganSwitchActivated = preferences.getBoolean("veganSwitch", false);
+        boolean isCelerySwitchActivated = preferences.getBoolean("switchCelery", false);
 
-// Use isVeganSwitchActivated to determine whether to apply colors and messages
-        if (isVeganSwitchActivated) {
-            veganList = new ArrayList<>();
+        if(isCelerySwitchActivated)
+        {
+            allergensList.add("Celery");
+        }
+
+        boolean isEggSwitchActivated = preferences.getBoolean("switchChickenEgg", false);
+
+        if(isEggSwitchActivated)
+        {
+            allergensList.add("Egg");
+        }
+
+        boolean isDairySwitchActivated = preferences.getBoolean("switchDairy", false);
+
+        if(isDairySwitchActivated)
+        {
+            allergensList.add("Milk");
+        }
+
+        boolean isFishSwitchActivated = preferences.getBoolean("switchFish", false);
+
+        if(isFishSwitchActivated)
+        {
+            allergensList.add("Fish");
+            allergensList.add("Shellfish");
+        }
+
+        boolean isGlutenSwitchActivated = preferences.getBoolean("switchGluten", false);
+
+        if(isGlutenSwitchActivated)
+        {
+            allergensList.add("Wheat");
+            allergensList.add("Barley");
+            allergensList.add("Malt");
+            allergensList.add("Barley Malt Extract");
+
+        }
+        boolean isPeanutSwitchActivated = preferences.getBoolean("switchPeanut", false);
+
+        if(isPeanutSwitchActivated)
+        {
+            allergensList.add("Peanut");
+        }
+
+        boolean isSoybeanSwitchActivated = preferences.getBoolean("switchSoybean", false);
+
+        if(isSoybeanSwitchActivated)
+        {
+            allergensList.add("Soybean");
+            allergensList.add("Soy");
+            allergensList.add("Soya Bean");
+        }
+
+        boolean isTreenutsSwitchActivated = preferences.getBoolean("switchTreenuts", false);
+
+        if(isTreenutsSwitchActivated)
+        {
+            allergensList.add("Tree Nuts");
+            allergensList.add("Nut");
+            allergensList.add("Nuts");
+
+        }
+        //Vegan check
+
+        boolean isMeatSwitchActivated = preferences.getBoolean("switchMeatV", false);
+
+        if(isMeatSwitchActivated)
+        {
             veganList.add("Chicken Breast");
-            veganList.add("Egg");
             veganList.add("Beef");
             veganList.add("Pork");
             veganList.add("Chicken");
             veganList.add("Lamb");
-            //veganList.add("Milk");
+            veganList.add("Cochineal");
+
+        }
+
+        boolean isEggVSwitchActivated = preferences.getBoolean("switchChickenEggV", false);
+
+        if(isEggVSwitchActivated)
+        {
+            veganList.add("Egg");
+        }
+
+        boolean isDairySwitchActivatedV = preferences.getBoolean("switchDairyV", false);
+
+        if(isDairySwitchActivatedV)
+        {
             veganList.add("Cheese");
             veganList.add("Butter");
             veganList.add("Yogurt");
-            //veganList.add("Eggs");
-            veganList.add("Honey");
-            veganList.add("Gelatin");
+            veganList.add("Egg");
+
+        }
+
+        boolean isFishVSwitchActivated = preferences.getBoolean("switchFishV", false);
+
+        if(isFishVSwitchActivated)
+        {
             veganList.add("Fish");
             veganList.add("Seafood");
-            veganList.add("Cochineal");
+
+        }
+
+        boolean isGeneralSwitchActivated = preferences.getBoolean("switchGeneralV", false);
+
+        if(isGeneralSwitchActivated)
+        {
+            veganList.add("Honey");
+            veganList.add("Gelatin");
             veganList.add("Casein");
             veganList.add("Lard");
             veganList.add("Tallow");
             veganList.add("Rennet");
             veganList.add("Whey");
-            veganList.add("Animal-derived Ingredients");
         }
+
 
 
         Intent intent = getIntent();

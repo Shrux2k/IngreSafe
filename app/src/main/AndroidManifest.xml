@@ -23,6 +23,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".EnvironmentHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VeganHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AllergyHomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".BadgeDisplay"
             android:exported="false" />
         <activity
