@@ -1,0 +1,88 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1C1C1E">
+
+        <!-- First Half with Green Background -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_weight="1"
+            android:background="#673BB8"
+            android:orientation="vertical"
+            android:id="@+id/firstHalfLayout">
+
+            <TextView
+                android:layout_width="237dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="80dp"
+                android:gravity="center"
+                android:text="✏️\nCustom"
+                android:textColor="@color/white"
+                android:textSize="40dp" />
+
+            <TextView
+                android:layout_width="216dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Choose the Ingredients that you want to avoid based on your preferences."
+                android:textColor="@color/white"/>
+
+
+            <!-- Content for the first half -->
+            <!-- You can add any views or content here -->
+
+        </LinearLayout>
+
+        <!-- Second Half with Switches -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="472dp"
+            android:layout_below="@id/firstHalfLayout">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="472dp"
+                android:orientation="vertical"
+                android:background="#1C1C1E">
+
+
+
+                <SearchView
+                    android:id="@+id/searchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:queryHint="Search Ingredients"
+                    android:background="@color/white" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/documentRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="375dp"
+                    android:layout_weight="1"
+                    style="@style/BlackRecyclerView"/>
+
+                <Button
+                    android:id="@+id/saveButton"
+                    android:layout_width="415dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:backgroundTint="#673BB8"
+                    android:gravity="center"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="5dp"
+                    android:text="Save my preferences" />
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+</RelativeLayout>

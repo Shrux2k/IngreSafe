@@ -121,6 +121,17 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        CardView cardViewCustom = findViewById(R.id.cardViewCustom);
+        cardViewCustom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(HomeActivity.this, CustomHomeActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 

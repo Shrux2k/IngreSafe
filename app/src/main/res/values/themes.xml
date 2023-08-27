@@ -53,5 +53,22 @@
         <item name = "android:foreground">@drawable/custom_cardview</item>
     </style>
 
+    <style name="BlackSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="android:background">#2C2C2E</item> <!-- Black background -->
+        <item name="android:editTextColor">#FFFFFF</item> <!-- White text color -->
+        <item name="android:textColor">#FFFFFF</item> <!-- White text color -->
+        <item name="android:textColorHint">#FFFFFF</item> <!-- White text color -->
+
+        <item name="android:colorControlNormal">#FFFFFF</item> <!-- White text color for suggestions and hint -->
+        <item name="android:colorControlActivated">#FFFFFF</item> <!-- White text color for activated state -->
+    </style>
+
+
+    <style name="BlackRecyclerView">
+        <item name="android:background">#2C2C2E</item> <!-- Black background -->
+        <item name="android:textColor">#FFFFFF</item>
+        <!-- White text color -->
+    </style>
+
 
 </resources>
