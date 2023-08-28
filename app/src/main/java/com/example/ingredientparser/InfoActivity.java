@@ -64,13 +64,8 @@ public class InfoActivity extends AppCompatActivity {
 
                 } else if (itemId == R.id.add) {
                     startActivity(new Intent(getApplicationContext(), AddActivity.class));
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                    return true;
+                    overridePendingTransition(0, 0);                    return true;
 
-                } else if (itemId == R.id.info) {
-                    startActivity(new Intent(getApplicationContext(), InfoActivity.class));
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                    return true;
                 }
                 return false;
 

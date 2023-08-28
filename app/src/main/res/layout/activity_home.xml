@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="#1C1C1E">
 
 <ScrollView
     android:layout_width="match_parent"
@@ -14,19 +14,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="76dp"
-        android:background="?attr/colorPrimary"
-        android:paddingTop="20dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="HOME"
-        app:titleTextAppearance="@style/ToolbarTitleStyle"
-        app:titleTextColor="@android:color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 
     <!-- Top half layout with black background -->
@@ -50,6 +37,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
+            android:id="@+id/greeting"
             android:layout_width="198dp"
             android:layout_height="77dp"
             android:layout_marginStart="30dp"
@@ -293,7 +281,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/white"
+        android:background="#1c1c1e"
+        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/white"
         app:menu="@menu/bottom_menu" />
 
 

@@ -15,11 +15,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -28,11 +31,14 @@ public class HomeActivity extends AppCompatActivity {
     private SharedPreferences preferences;
 
     private ImageView badgeImageView;
+
     private int scanCount;
 
     int remScans;
 
     int totalCount = 0;
+
+    String userEmail = "there!";
 
 
     BottomNavigationView bottomNavigationView;
@@ -42,11 +48,27 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         TextView scanCountView = findViewById(R.id.scanCountView);
         TextView remScansView = findViewById(R.id.remainingScans);
+        TextView greetingUser = findViewById(R.id.greeting);
 
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+
+        if (user != null) {
+            // The user is signed in
+            userEmail = user.getEmail();
+            if (userEmail.contains("@gmail.com")) {
+                // Remove "@gmail.com" from the email
+                userEmail = userEmail.replace("@gmail.com", "");
+            }
+            // userEmail now contains the user's email
+        }
+        greetingUser.setText("Hi "+userEmail+", \nHere's your progress");
 
         ImageView imageView = findViewById(R.id.badgeImageView);
 
@@ -141,15 +163,9 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 int itemId = item.getItemId();
-                if (itemId == R.id.home) {
-                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    return true;
-
-                } else if (itemId == R.id.add) {
+                if (itemId == R.id.add) {
                     startActivity(new Intent(getApplicationContext(), AddActivity.class));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    return true;
+                    overridePendingTransition(0, 0);                    return true;
 
                 } else if (itemId == R.id.info) {
                     startActivity(new Intent(getApplicationContext(), InfoActivity.class));

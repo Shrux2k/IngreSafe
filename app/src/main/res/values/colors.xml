@@ -14,6 +14,8 @@
     <!-- Focused EditText Background Color -->
     <color name="focusedEditTextBackground">#F2F2F2</color>
 
+    <color name="green">#00FF00</color>
+
     <!-- Focused EditText Border Color -->
     <color name="focusedEditTextBorderColor">@color/gray</color>
 
@@ -22,5 +24,15 @@
 
     <!-- Normal EditText Border Color -->
     <color name="normalEditTextBorderColor">#C0C0C0</color>
+
+    <style name="CustomBottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <!-- Set background color -->
+        <item name="android:background">#2c2c2e</item>
+
+        <!-- Set icon colors using the color selector -->
+        <item name="itemIconTint">@color/bottom_navigation_color</item>
+    </style>
+
+
 
 </resources>

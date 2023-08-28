@@ -4,6 +4,7 @@
     android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@color/black"
     android:padding="16dp">
 
 <TextView
@@ -11,16 +12,17 @@ android:id="@+id/dialogText"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:textSize="20sp"
-android:textColor="@android:color/black"
+android:textColor="@android:color/white"
 android:layout_gravity="center_horizontal"
-android:text="⚠️ Always double check!"/>
+android:text="⚠️ Always double check!"
+    android:textStyle="bold"/>
 
 <TextView
 android:id="@+id/dialogContent"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:textSize="16sp"
-android:textColor="@android:color/black"
+android:textColor="@android:color/white"
 android:layout_gravity="center_horizontal"
 android:text="This is an informational tool that helps you check for ingredients, it might not be 100% accurate.\nALWAYS double check the packaging before consuming a product if you're allergic or intolerant.\n\nI understand that I should always double check the packaging and can't fully rely on this app."/>
 
@@ -28,7 +30,10 @@ android:text="This is an informational tool that helps you check for ingredients
 android:id="@+id/dismissButton"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
-android:text="Dismiss"
+android:text="Confirm"
+    android:textStyle="bold"
+    android:textColor="@color/black"
+    android:backgroundTint="@color/white"
 android:layout_gravity="center_horizontal"
 android:layout_marginTop="16dp"/>
 

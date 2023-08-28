@@ -136,18 +136,11 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
                 int itemId = item.getItemId();
                 if (itemId == R.id.home) {
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                    return true;
-
-                } else if (itemId == R.id.add) {
-                    startActivity(new Intent(getApplicationContext(), AddActivity.class));
-                    overridePendingTransition(0, 0);
-                    return true;
+                    overridePendingTransition(0, 0);                    return true;
 
                 } else if (itemId == R.id.info) {
                     startActivity(new Intent(getApplicationContext(), InfoActivity.class));
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    return true;
+                    overridePendingTransition(0, 0);                    return true;
                 }
                 return false;
 
@@ -174,7 +167,7 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
         TextView dialogContent = dialogView.findViewById(R.id.dialogContent);
         Button dismissButton = dialogView.findViewById(R.id.dismissButton);
 
-        dialogText.setText("⚠️ Always Double Check ⚠️  \n");
+        dialogText.setText("⚠️ Always Double Check \n");
         dialogContent.setText("This is an informational tool that helps you check for ingredients, it might not be 100% accurate.\n\nALWAYS double check the packaging before consuming a product if you're allergic or intolerant.\n\nI understand that I should always double check the packaging and can't fully rely on this app.");
 
         dialogView.setBackgroundResource(R.drawable.rounded_dialog_background);
