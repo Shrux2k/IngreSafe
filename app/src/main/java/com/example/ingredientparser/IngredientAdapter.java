@@ -111,7 +111,7 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
                 //groupNameTextView.setText("Vegan ingredient: " + groupNameTextView.getText()); // Add label for vegan ingredients
                 potentialAllergenTextView.setVisibility(View.GONE); // Hide potentialAllergenTextView
             } else {
-                color = Color.BLACK;
+                color = Color.WHITE;
                 potentialAllergenTextView.setVisibility(View.GONE);
                 potentialVeganTextView.setVisibility(View.GONE); // Hide potentialVeganTextView
             }
@@ -128,6 +128,8 @@ public class IngredientAdapter extends ExpandableRecyclerViewAdapter<IngredientA
         DescriptionViewHolder(View itemView) {
             super(itemView);
             descriptionTextView = itemView.findViewById(R.id.descriptionTextView);
+            descriptionTextView.setTextColor(Color.WHITE);
+
         }
 
         void setIngredientDescription(String ingredientDescription) {
