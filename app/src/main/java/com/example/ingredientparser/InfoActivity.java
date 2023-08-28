@@ -3,22 +3,27 @@ package com.example.ingredientparser;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.WindowCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -33,9 +38,13 @@ public class InfoActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
 
-    Button insert;
-
     FirebaseFirestore firestore;
+
+    String userEmail;
+
+    TextView logout;
+    private SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +54,33 @@ public class InfoActivity extends AppCompatActivity {
 
         firestore = FirebaseFirestore.getInstance();
 
+        CardView feedbackForm = findViewById(R.id.feedback);
+        CardView logoutButton = findViewById(R.id.logout);
+
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setSelectedItemId(R.id.home);
+
+        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+
+        logout = findViewById(R.id.logoutuser);
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+
+        if (user != null) {
+            // The user is signed in
+            userEmail = user.getEmail();
+            if (userEmail.contains("@gmail.com")) {
+                // Remove "@gmail.com" from the email
+                userEmail = userEmail.replace("@gmail.com", "");
+            }
+            // userEmail now contains the user's email
+        }
+
+        logout.setText("Logout\n"+"("+userEmail+")");
+
 
 
 
@@ -72,6 +104,31 @@ public class InfoActivity extends AppCompatActivity {
 
             }
 
+        });
+
+        feedbackForm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String googleFormUrl = "https://forms.gle/8x7y4Nyys6o1KAJ76";
+
+                // Create an intent to open a web browser
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(googleFormUrl));
+
+                // Start the web browser activity to open the Google Form
+                startActivity(intent);
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("remembered", false);
+                editor.apply();
+                Intent intent = new Intent(InfoActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
         });
     }
 }

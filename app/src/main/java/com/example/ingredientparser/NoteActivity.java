@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -28,7 +29,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.ExpandableRecyclerViewAdapter;
 
@@ -242,6 +246,15 @@ public class NoteActivity extends AppCompatActivity {
             veganList.add("Whey");
         }
 
+        SharedPreferences preferencesCustom = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        Set<String> selectedDocumentSet = preferencesCustom.getStringSet("SelectedDocuments", new HashSet<>());
+
+        for (String document : selectedDocumentSet) {
+            if(!allergensList.contains(document))
+            {
+                allergensList.add(document);
+            }
+        }
 
 
         Intent intent = getIntent();
@@ -270,13 +283,17 @@ public class NoteActivity extends AppCompatActivity {
                 }
             }
 
+            Set<String> uniqueSet = new LinkedHashSet<>(allergensDisplay);
+            allergensDisplay.clear();
+            allergensDisplay.addAll(uniqueSet);
+
+
 
             if (!allergensDisplay.isEmpty()) {
                 // Allergens are available, show the bottom sheet
                 showBottomSheet();
             } else {
-                // No allergens found, show a message
-                showNoAllergensMessage();
+                Toast.makeText(this, "Hurray! No Allergens found", Toast.LENGTH_LONG).show();
             }
 
 
@@ -291,6 +308,9 @@ public class NoteActivity extends AppCompatActivity {
                     Context context = NoteActivity.this;
                     BottomSheetDialog dialog = new BottomSheetDialog(context);
 
+                    int dialogHeight = getResources().getDimensionPixelSize(R.dimen.bottom_sheet_height); // Create dimen resource
+                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, dialogHeight);
+
                     View dialogView = LayoutInflater.from(context).inflate(R.layout.bottomsheetlayout, null);
                     FlowLayout flowLayout = dialogView.findViewById(R.id.flowLayoutAllergens);
 
@@ -300,7 +320,7 @@ public class NoteActivity extends AppCompatActivity {
                         for (String allergen : allergensDisplay) {
                             TextView textView = new TextView(context);
                             textView.setText(allergen);
-                            textView.setTextColor(Color.BLACK);
+                            textView.setTextColor(Color.WHITE);
                             textView.setPadding(16, 8, 16, 8);
                             textView.setBackgroundResource(R.drawable.rounded_allergen_bubble); // Set background resource
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -314,10 +334,9 @@ public class NoteActivity extends AppCompatActivity {
 
                         dialog.setContentView(dialogView);
                         dialog.show();
-                    } else {
-                        textView.setText("Hurray! No Allergens Found");
-                        dialog.setContentView(dialogView);
-                        dialog.show();
+                    } else
+                    {
+                        Toast.makeText(context, "Hurray! No allergens found", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -332,8 +351,13 @@ public class NoteActivity extends AppCompatActivity {
                     Context context = NoteActivity.this;
                     BottomSheetDialog dialog = new BottomSheetDialog(context);
 
+                    int dialogHeight = getResources().getDimensionPixelSize(R.dimen.bottom_sheet_height); // Create dimen resource
+                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, dialogHeight);
+
                     View dialogView = LayoutInflater.from(context).inflate(R.layout.bottomsheetlayoutuh, null);
                     FlowLayout flowLayout = dialogView.findViewById(R.id.flowLayoutUnhealthy);
+
+
 
                     if (!unhealthyIngredients.isEmpty()) {
 
@@ -341,9 +365,9 @@ public class NoteActivity extends AppCompatActivity {
                         for (String ingredient: unhealthyIngredients) {
                             TextView textView = new TextView(context);
                             textView.setText(ingredient);
-                            textView.setTextColor(Color.BLACK);
+                            textView.setTextColor(Color.WHITE);
                             textView.setPadding(16, 8, 16, 8);
-                            textView.setBackgroundResource(R.drawable.rounded_allergen_bubble); // Set background resource
+                            textView.setBackgroundResource(R.drawable.rounded_unhealthy_bubble); // Set background resource
                             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                                     LinearLayout.LayoutParams.WRAP_CONTENT,
                                     LinearLayout.LayoutParams.WRAP_CONTENT
@@ -356,12 +380,8 @@ public class NoteActivity extends AppCompatActivity {
                         dialog.setContentView(dialogView);
                         dialog.show();
                     } else {
-                        Context context2 = NoteActivity.this;
-                        BottomSheetDialog dialog2 = new BottomSheetDialog(context);
-                        View dialogView2 = LayoutInflater.from(context2).inflate(R.layout.bottomsheetlayout, null);
-                        textView.setText("Hurray! No Unhealthy ingredients found");
-                        dialog.setContentView(dialogView2);
-                        dialog2.show();
+                        Toast.makeText(context, "Hurray! No Unhealthy Ingredients found", Toast.LENGTH_SHORT).show();
+
                     }
                 }
             });

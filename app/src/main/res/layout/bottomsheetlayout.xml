@@ -60,7 +60,9 @@
     <com.example.ingredientparser.FlowLayout
         android:id="@+id/flowLayoutAllergens"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
+
 
         <!-- Your TextViews will be added here dynamically -->
     </com.example.ingredientparser.FlowLayout>

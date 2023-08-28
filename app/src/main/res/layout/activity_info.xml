@@ -176,11 +176,19 @@
                     android:text="To also scan words that are written in cursive or in non-standard fonts. Works best on Android 10.0 and newer."
                     android:textColor="@color/white" />
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/feedback"
-                    android:layout_width="194dp"
-                    android:layout_height="68dp"
-                    android:layout_gravity="center"
+                    android:layout_width="190dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="left"
+
                     android:layout_margin="8dp"
                     app:cardBackgroundColor="#2C2C2E"
                     app:cardCornerRadius="8dp"
@@ -200,8 +208,9 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="Send Feedback"
+                            android:textStyle="bold"
                             android:paddingTop="6dp"
-                            android:textColor="@color/white"
+                            android:textColor="#DEA552"
                             android:textSize="18sp" />
 
 
@@ -210,13 +219,50 @@
                 </androidx.cardview.widget.CardView>
 
 
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/logout"
+                    android:layout_width="190dp"
+                    android:layout_height="70dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toEndOf="@+id/feedback"
+                app:cardBackgroundColor="#2C2C2E"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="224dp"
+                        android:id="@+id/logoutuser"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:text="Logout"
+                        android:paddingTop="2dp"
+                        android:textColor="#c32536"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+                </RelativeLayout>
+
+
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:textColor="@color/white"
                     android:layout_marginTop="-10dp"
-                    android:text="Made with 🤍 by Shashank" />
+                    android:text="Made with ☕ by Shashank" />
 
 
             </LinearLayout>

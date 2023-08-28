@@ -18,6 +18,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -75,50 +76,34 @@ public class MainActivity extends AppCompatActivity {
 
     //InfoActivity infoActivity = new InfoActivity();
 
+    private SharedPreferences sharedPreferences;
+
+
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
         startActivity(new Intent(getApplicationContext(),AddActivity.class));
         overridePendingTransition(0,0);
 
+        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
-        /*
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        boolean isRemembered = sharedPreferences.getBoolean("remembered", false);
 
-        bottomNavigationView.setSelectedItemId(R.id.add);
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                int itemId = item.getItemId();
-                if (itemId == R.id.home) {
-                    startActivity(new Intent(getApplicationContext(),HomeActivity.class));
-                    overridePendingTransition(0,0);
-                    return true;
-                } else if (itemId == R.id.note) {
-                    startActivity(new Intent(getApplicationContext(),NoteActivity.class));
-                    overridePendingTransition(0,0);
-                    return true;
-                } else if (itemId == R.id.add) {
-                    startActivity(new Intent(getApplicationContext(),AddActivity.class));
-                    overridePendingTransition(0,0);
-                    return true;
-                } else if (itemId==R.id.health) {
-                    startActivity(new Intent(getApplicationContext(),HealthActivity.class));
-                    overridePendingTransition(0,0);
-                    return true;
-                } else if (itemId==R.id.info) {
-                    startActivity(new Intent(getApplicationContext(),InfoActivity.class));
-                    overridePendingTransition(0,0);
-                    return true;
-                }
-                return false;
+        if (isRemembered) {
+            // Set the content view to home layout if remembered.
+            setContentView(R.layout.activity_add);
+            startActivity(new Intent(getApplicationContext(),AddActivity.class));
+            overridePendingTransition(0,0);
+        } else {
+            // Set the content view to login layout if not remembered.
+            setContentView(R.layout.activity_login);
+            startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+            overridePendingTransition(0,0);
+        }
 
 
-            }
-        }); */
     }
 
 }
