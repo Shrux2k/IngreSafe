@@ -72,6 +72,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
+                            android:paddingLeft="5dp"
                             android:text="Find partial matches"
                             android:textColor="@color/white"
                             android:textSize="18sp" />
@@ -114,6 +115,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
+                            android:paddingLeft="5dp"
                             android:text="Low power mode"
                             android:textColor="@color/white"
                             android:textSize="18sp" />
@@ -156,6 +158,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
+                            android:paddingLeft="5dp"
                             android:text="Extra recognition"
                             android:textColor="@color/white"
                             android:textSize="18sp" />

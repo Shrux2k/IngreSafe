@@ -43,7 +43,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.mlkit.vision.common.InputImage;
@@ -57,7 +61,9 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import androidx.exifinterface.media.ExifInterface;
@@ -95,6 +101,9 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
     private static final int REQUEST_CAMERA_CODE = 100;
 
     BottomNavigationView bottomNavigationView;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     SharedPreferences preferences;
 
@@ -412,6 +421,14 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
                     editor.putInt("counter", counter);
                     editor.apply();
 
+                    SharedPreferences user = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                    String userEmail = user.getString("userEmail", "default@example.com");
+
+
+
+                    setLeaderboardData(userEmail, counter);
+
+
                     Intent intent = new Intent(AddActivity.this, NoteActivity.class);
                     intent.putExtra("INGREDIENTS_LIST", (Serializable) ingredientsList);
                     intent.putExtra("RECOGNIZED_TEXT", recognizedText);
@@ -437,6 +454,57 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
 
             }
         });
+    }
+
+    private void setLeaderboardData(String userEmail, int counter)
+    {
+        try {
+            CollectionReference usersCollection = db.collection("Leaderboards");
+            Query query = usersCollection.whereEqualTo("Username", userEmail);
+
+            query.get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        Log.d("Firestore", "Query Success"); // Add this line
+
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots)
+                        {
+                            // Update the "Scans" field for each matching document
+                            Log.d("For Loop", "went inside ");
+                            DocumentReference documentRef = documentSnapshot.getReference();
+
+
+                            // Create a map to update the "Scans" field
+                            Map<String, Object> updates = new HashMap<>();
+                            updates.put("Scans", counter);
+
+                            // Update the document
+                            documentRef.update(updates)
+                                    .addOnSuccessListener(aVoid -> {
+                                        // Update successful for a specific document
+                                        // You can add your code here to handle each successful update
+                                        Log.d("Firestore", "Success");
+
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Handle errors
+                                        // You can add your code here to handle update failures
+                                        Log.d("Firestore", "Failed");
+
+                                    });
+                        }
+                        Log.d("For Loop", "Exited");
+
+                    }).addOnFailureListener(e -> {
+                        Log.d("Firestore error", "Failed");
+                    });
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            Log.d("Firestore error", "Firestore operation failed " + e.getMessage());
+
+        }
+
+
     }
 
     Executor getExecutor() {

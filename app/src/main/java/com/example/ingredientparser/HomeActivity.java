@@ -78,6 +78,12 @@ public class HomeActivity extends AppCompatActivity {
         boolean isVeganSwitchActivated = preferences.getBoolean("veganSwitch", false);
         veganSwitch.setChecked(isVeganSwitchActivated);
 
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("userEmail", userEmail);
+        editor.apply();
+
+
+
         veganSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             //editor.putBoolean("veganSwitch", isChecked);
             //editor.apply();

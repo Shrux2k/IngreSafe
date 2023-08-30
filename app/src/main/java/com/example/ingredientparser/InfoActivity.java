@@ -109,7 +109,7 @@ public class InfoActivity extends AppCompatActivity {
         feedbackForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String googleFormUrl = "https://forms.gle/8x7y4Nyys6o1KAJ76";
+                String googleFormUrl = "https://forms.gle/MtJxkgcnJwMx1RPw5";
 
                 // Create an intent to open a web browser
                 Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -128,6 +128,7 @@ public class InfoActivity extends AppCompatActivity {
                 editor.apply();
                 Intent intent = new Intent(InfoActivity.this, LoginActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

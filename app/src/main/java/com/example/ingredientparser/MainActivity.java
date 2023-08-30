@@ -25,6 +25,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.renderscript.ScriptGroup;
@@ -58,27 +59,11 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    BottomNavigationView bottomNavigationView;
 
+    private static final int SPLASH_DISPLAY_TIME = 2000; // 2 seconds
 
-    //HomeActivity homeActivity = new HomeActivity();
-
-
-    //NoteActivity noteActivity = new NoteActivity();
-
-
-
-    //AddActivity addActivity = new AddActivity();
-
-
-    //HealthActivity healthActivity = new HealthActivity();
-
-
-    //InfoActivity infoActivity = new InfoActivity();
 
     private SharedPreferences sharedPreferences;
-
-
 
 
     @Override
@@ -86,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         startActivity(new Intent(getApplicationContext(),AddActivity.class));
         overridePendingTransition(0,0);
+        
 
         sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 

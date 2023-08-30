@@ -20,7 +20,6 @@
     </style>
 
 
-
     <style name="ToolbarTitleStyle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">16sp</item> <!-- Adjust the text size as needed -->
         <!-- You can add more styling attributes here -->
@@ -38,21 +37,21 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
-    
-    <style name="CardView.vegan" parent = "CardView">
-        <item name = "android:foreground">@drawable/vegan_cardview</item>
+
+    <style name="CardView.vegan" parent="CardView">
+        <item name="android:foreground">@drawable/vegan_cardview</item>
     </style>
 
-    <style name="CardView.allergy" parent = "CardView">
-        <item name = "android:foreground">@drawable/allergy_cardview</item>
+    <style name="CardView.allergy" parent="CardView">
+        <item name="android:foreground">@drawable/allergy_cardview</item>
     </style>
 
-    <style name="CardView.pregnant" parent = "CardView">
-        <item name = "android:foreground">@drawable/pregnant_cardview</item>
+    <style name="CardView.pregnant" parent="CardView">
+        <item name="android:foreground">@drawable/pregnant_cardview</item>
     </style>
 
-    <style name="CardView.custom" parent = "CardView">
-        <item name = "android:foreground">@drawable/custom_cardview</item>
+    <style name="CardView.custom" parent="CardView">
+        <item name="android:foreground">@drawable/custom_cardview</item>
     </style>
 
     <style name="BlackSearchView" parent="Widget.AppCompat.SearchView">
@@ -61,8 +60,10 @@
         <item name="android:textColor">#FFFFFF</item> <!-- White text color -->
         <item name="android:textColorHint">#FFFFFF</item> <!-- White text color -->
 
-        <item name="android:colorControlNormal">#FFFFFF</item> <!-- White text color for suggestions and hint -->
-        <item name="android:colorControlActivated">#FFFFFF</item> <!-- White text color for activated state -->
+        <item name="android:colorControlNormal">#FFFFFF
+        </item> <!-- White text color for suggestions and hint -->
+        <item name="android:colorControlActivated">#FFFFFF
+        </item> <!-- White text color for activated state -->
     </style>
 
 
@@ -73,8 +74,5 @@
     </style>
 
     <!-- styles.xml -->
-
-
-
 
 </resources>
