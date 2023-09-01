@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,16 +14,22 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -40,6 +47,10 @@ public class HomeActivity extends AppCompatActivity {
 
     String userEmail = "there!";
 
+     int scansValue;
+    TextView scanCountView;
+    TextView remScansView;
+
 
     BottomNavigationView bottomNavigationView;
 
@@ -52,8 +63,8 @@ public class HomeActivity extends AppCompatActivity {
 
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-        TextView scanCountView = findViewById(R.id.scanCountView);
-        TextView remScansView = findViewById(R.id.remainingScans);
+        scanCountView = findViewById(R.id.scanCountView);
+         remScansView= findViewById(R.id.remainingScans);
         TextView greetingUser = findViewById(R.id.greeting);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -64,8 +75,11 @@ public class HomeActivity extends AppCompatActivity {
             userEmail = user.getEmail();
             if (userEmail.contains("@gmail.com")) {
                 // Remove "@gmail.com" from the email
-                userEmail = userEmail.replace("@gmail.com", "");
+                userEmail = userEmail.split("@")[0];
+                userEmail = userEmail.toLowerCase();
+
             }
+
             // userEmail now contains the user's email
         }
         greetingUser.setText("Hi "+userEmail+", \nHere's your progress");
@@ -73,8 +87,11 @@ public class HomeActivity extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.badgeImageView);
 
         veganSwitch = findViewById(R.id.veganSwitch);
+
+        GetScanCountFromDB();
+        System.out.println("Value after the method: "+scansValue);
         SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        //SharedPreferences.Editor editor = preferences.edit();
+       // SharedPreferences.Editor editor = preferences.edit();
         boolean isVeganSwitchActivated = preferences.getBoolean("veganSwitch", false);
         veganSwitch.setChecked(isVeganSwitchActivated);
 
@@ -90,20 +107,7 @@ public class HomeActivity extends AppCompatActivity {
             preferences.edit().putBoolean("veganSwitch", isChecked).apply();
         });
 
-        badgeImageView = findViewById(R.id.badgeImageView);
-        loadScanCount(); // Load the scan count from SharedPreferences
 
-
-        updateBadge(); // Update the badge based on the loaded scan count
-        String scan = "Total Scans : " + scanCount+"/"+totalCount;
-        scanCountView.setText(scan);
-        remScans = totalCount-scanCount;
-        remScansView.setText(remScans+" scans left to unlock the next badge");
-
-        ProgressBar progressBar = findViewById(R.id.progressBar);
-        ObjectAnimator.ofInt(progressBar, "progress", 0, scanCount)
-                .setDuration(1000) // Animation duration in milliseconds
-                .start();
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,6 +189,68 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    private void GetScanCountFromDB()
+    {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference documentRef = db.collection("Leaderboards").document(userEmail);
+
+        documentRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Log.d("Firebase", "came inside OnSuccess");
+                        if (documentSnapshot.exists()) {
+                            Log.d("Firebase", "Inside onSuccess");
+                            int scans = documentSnapshot.getLong("Scans").intValue();
+                            System.out.println("Scan count is:"+scans);
+                            badgeImageView = findViewById(R.id.badgeImageView);
+                            //loadScanCount();
+
+
+                            updateBadge(scans); // Update the badge based on the loaded scan count
+                            String scan = "Total Scans : " + scans+"/"+totalCount;
+                            scanCountView.setText(scan);
+                            remScans = totalCount-scans;
+                            remScansView.setText(remScans+" scans left to unlock the next badge");
+
+                            if(scans>=100 && scans<500)
+                            {
+                                scans = scans-100;
+                            }
+                            if(scans>=500 && scans<1000)
+                            {
+                                scans = scans - 500;
+                            }
+                            if(scans>=1000 && scans<10000)
+                            {
+                                scans = scans - 1000;
+                            }
+
+                            ProgressBar progressBar = findViewById(R.id.progressBar);
+                            ObjectAnimator.ofInt(progressBar, "progress", 0, scans)
+                                    .setDuration(1000) // Animation duration in milliseconds
+                                    .start();
+
+                        } else {
+                            Log.d("LoadScanCount", "Could not load ScanCount: ");
+                        }
+                    }
+
+                })
+
+
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle any errors that occurred during the operation
+                        Log.e("Firestore", "Error getting document for scanCount", e);
+                    }
+                });
+
+    }
 
 
     private void loadScanCount()
@@ -194,16 +260,17 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    private void updateBadge() {
-        if (scanCount >= 500) {
+    private void updateBadge(int scansValue) {
+        System.out.println("Update badge"+scansValue);
+        if (scansValue >= 500 && scansValue<1000) {
             badgeImageView.setImageResource(R.drawable.expert_foodie);
-            totalCount = 500;
-        }else if (scanCount>=1000)
+            totalCount = 1000;
+        }else if (scansValue>=1000)
         {
             badgeImageView.setImageResource(R.drawable.master_foodie);
             totalCount = 10000;
         }
-        else if (scanCount >= 100) {
+        else if (scansValue >= 100 && scansValue <500) {
             badgeImageView.setImageResource(R.drawable.beginner_foodie);
             totalCount = 500;
         } else {
