@@ -37,6 +37,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -60,6 +61,7 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -102,10 +104,12 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
 
     BottomNavigationView bottomNavigationView;
 
+    SharedPreferences preferences;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
-    SharedPreferences preferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +118,8 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         showCustomDialog();
 
-        preferences = getSharedPreferences("CounterPrefs", MODE_PRIVATE);
-        counter = preferences.getInt("counter", 0);
+
+
 
 
         previewView = findViewById(R.id.previewView);
@@ -165,6 +169,11 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
             }
 
         });
+    }
+
+    private void GetCountFromDB()
+    {
+
     }
 
     private void showCustomDialog() {
@@ -415,18 +424,33 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
 
                     progressBar.setVisibility(View.VISIBLE);
 
-                    counter++;
-                    System.out.println("Counter value is:"+ counter);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putInt("counter", counter);
-                    editor.apply();
-
                     SharedPreferences user = getSharedPreferences("MyPrefs", MODE_PRIVATE);
                     String userEmail = user.getString("userEmail", "default@example.com");
 
+                    updateCountUserDB(userEmail, new CountCallback() {
+                        @Override
+                        public void onCountUpdated(int updatedScansValue) {
+                            // Handle the updated count here
+                            System.out.println("Updated count: " + updatedScansValue);
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            // Handle errors here
+                            System.out.println("Error: " + error);
+                        }
+                    });
 
 
-                    setLeaderboardData(userEmail, counter);
+
+
+
+                    //System.out.println("Counter value is:"+ counter);
+                    //SharedPreferences.Editor editor = preferences.edit();
+                    //editor.putInt("counter", updatedScansValue);
+                    //editor.apply();
+
+                    //setLeaderboardData(userEmail, updatedScansValue);
 
 
                     Intent intent = new Intent(AddActivity.this, NoteActivity.class);
@@ -455,6 +479,61 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
             }
         });
     }
+
+    private void updateCountUserDB(String userEmail, final CountCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference documentRef = db.collection("Leaderboards").document(userEmail);
+
+        documentRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    // Get the current "Scans" value
+                    Long currentScansValue = documentSnapshot.getLong("Scans");
+                    System.out.println("Current scans value:" + currentScansValue);
+
+                    // Check if the "Scans" field exists and has a value
+                    if (currentScansValue != null) {
+                        // Increment the "Scans" value by one
+                        long updatedScansValue = currentScansValue + 1;
+                        // Create a map to update the "Scans" field
+                        Map<String, Object> updates = new HashMap<>();
+                        updates.put("Scans", updatedScansValue);
+
+                        // Update the document with the new "Scans" value
+                        documentRef.update(updates)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        // Handle the completion of the update operation here
+                                        if (task.isSuccessful()) {
+                                            // Return the updated Scans value through the callback
+                                            callback.onCountUpdated((int) updatedScansValue);
+                                        } else {
+                                            // Handle the case where the update fails
+                                            callback.onError("Failed to update count");
+                                        }
+                                    }
+                                });
+                    }
+                }
+            }
+        });
+    }
+
+    // Define a callback interface to handle the result
+    interface CountCallback {
+        void onCountUpdated(int updatedValue);
+        void onError(String error);
+    }
+
+
+
+
+
+
+
+
 
     private void setLeaderboardData(String userEmail, int counter)
     {

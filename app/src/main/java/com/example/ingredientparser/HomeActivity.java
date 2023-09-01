@@ -216,22 +216,16 @@ public class HomeActivity extends AppCompatActivity {
                             remScans = totalCount-scans;
                             remScansView.setText(remScans+" scans left to unlock the next badge");
 
-                            if(scans>=100 && scans<500)
-                            {
-                                scans = scans-100;
-                            }
-                            if(scans>=500 && scans<1000)
-                            {
-                                scans = scans - 500;
-                            }
-                            if(scans>=1000 && scans<10000)
-                            {
-                                scans = scans - 1000;
-                            }
+                            int endValue =0;
+
+                            int startValue = (int) ((float) scans / totalCount * 100);
+
+
+                            int duration = 1000;
 
                             ProgressBar progressBar = findViewById(R.id.progressBar);
-                            ObjectAnimator.ofInt(progressBar, "progress", 0, scans)
-                                    .setDuration(1000) // Animation duration in milliseconds
+                            ObjectAnimator.ofInt(progressBar, "progress", endValue, startValue)
+                                    .setDuration(duration)
                                     .start();
 
                         } else {
