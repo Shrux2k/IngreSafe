@@ -1,19 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<!-- fragment_badge.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".BadgeFragment"
-    android:background="@color/white">
+    android:layout_height="match_parent">
 
-
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Badge Display"
-        android:layout_gravity="center"
-        android:textSize="20dp"
-        android:gravity="center"/>
-
-
-</FrameLayout>
+        android:layout_height="630dp" />
+</RelativeLayout>

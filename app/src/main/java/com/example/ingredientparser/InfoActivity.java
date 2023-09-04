@@ -42,6 +42,11 @@ public class InfoActivity extends AppCompatActivity {
 
     String userEmail;
 
+    Switch partial;
+    Switch power;
+    Switch text;
+
+
     TextView logout;
     private SharedPreferences sharedPreferences;
 
@@ -56,11 +61,45 @@ public class InfoActivity extends AppCompatActivity {
 
         CardView feedbackForm = findViewById(R.id.feedback);
         CardView logoutButton = findViewById(R.id.logout);
+        partial = findViewById(R.id.matches);
+        power = findViewById(R.id.lowpower);
+        text = findViewById(R.id.textrecog);
+
+        // Save switch preferences
+        SharedPreferences preferences = getSharedPreferences("SwitchPreferences", MODE_PRIVATE);
+
+
+        boolean partialSwitch = preferences.getBoolean("partial", false);
+        partial.setChecked(partialSwitch);
+
+        partial.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            preferences.edit().putBoolean("partial", isChecked).apply();
+        });
+
+        boolean powerSwitch = preferences.getBoolean("power", false);
+        power.setChecked(powerSwitch);
+
+        power.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            preferences.edit().putBoolean("power", isChecked).apply();
+        });
+
+        boolean textSwitch = preferences.getBoolean("text", false);
+        text.setChecked(textSwitch);
+
+        text.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            preferences.edit().putBoolean("text", isChecked).apply();
+        });
+
+
+
+
+
+
 
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        bottomNavigationView.setSelectedItemId(R.id.home);
+        bottomNavigationView.setSelectedItemId(R.id.info);
 
         sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
@@ -109,7 +148,7 @@ public class InfoActivity extends AppCompatActivity {
         feedbackForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String googleFormUrl = "https://forms.gle/MtJxkgcnJwMx1RPw5";
+                String googleFormUrl = "https://forms.gle/bDtTrXVUEfyiLtMQ6";
 
                 // Create an intent to open a web browser
                 Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -132,4 +171,6 @@ public class InfoActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

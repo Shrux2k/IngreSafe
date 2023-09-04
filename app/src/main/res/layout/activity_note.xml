@@ -37,7 +37,7 @@
         android:background="#2c2c2e"
         app:itemTextColor="@color/white"
         app:itemIconTint="@color/white"
-        app:menu="@menu/bottom_menu"/>
+        app:menu="@menu/bottom_menu" />
 
     <!-- Optional: Adding a semi-transparent overlay for a cleaner look -->
     <View
@@ -53,20 +53,22 @@
         android:layout_width="140dp"
         android:layout_height="36dp"
 
-        android:layout_marginTop="660dp"
-        android:background="@drawable/rounded_corners_bg"
+        android:layout_marginTop="630dp"
+        android:backgroundTint="@color/white"
         android:gravity="center"
+        android:textColor="@color/black"
         android:onClick="analysebutton"
         android:text="Allergens" />
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="142dp"
+        android:layout_width="200dp"
         android:layout_height="36dp"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="660dp"
+        android:layout_marginTop="630dp"
         android:layout_marginRight="7dp"
-        android:background="@drawable/rounded_corners_bg"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/black"
         android:gravity="center"
         android:onClick="analysebutton"
         android:text="Unhealthy Ingredients" />

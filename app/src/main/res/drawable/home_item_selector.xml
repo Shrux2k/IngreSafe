@@ -1,0 +1,8 @@
+<!-- res/drawable/menu_item_selector.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected state -->
+    <item android:drawable="@drawable/home_selected" android:state_checked="true" />
+    <!-- Pressed state -->
+    <!-- Normal state -->
+    <item android:drawable="@drawable/home_normal" />
+</selector>

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
@@ -69,8 +70,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startActivity(new Intent(getApplicationContext(),AddActivity.class));
-        overridePendingTransition(0,0);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        //setContentView(R.layout.activity_splash);
+        //startActivity(new Intent(getApplicationContext(),SplashActivity.class));
+        //overridePendingTransition(0,0);
         
 
         sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);

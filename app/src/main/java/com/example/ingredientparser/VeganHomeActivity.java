@@ -25,6 +25,8 @@ public class VeganHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vegan_home);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.navColorFix));
+
 
         meat= findViewById(R.id.switchMeatV);
         egg= findViewById(R.id.switchChickenEggV);

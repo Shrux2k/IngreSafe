@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Switch;
 
 public class AllergyHomeActivity extends AppCompatActivity {
@@ -36,6 +37,7 @@ public class AllergyHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allergy_home);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.navColorFix));
 
         celery= findViewById(R.id.switchCelery);
         egg= findViewById(R.id.switchChickenEgg);

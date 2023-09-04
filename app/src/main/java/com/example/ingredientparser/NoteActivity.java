@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -28,6 +29,8 @@ import com.google.android.material.navigation.NavigationBarView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -53,8 +56,6 @@ public class NoteActivity extends AppCompatActivity {
 
 
 
-    //Button analyse = findViewById(R.id.analyse);
-
     private List<String> allergensList;
     private List<String> veganList;
 
@@ -73,7 +74,9 @@ public class NoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.navColorFix));
         setContentView(R.layout.activity_note);
+
 
 
         ProgressBar progressBar = findViewById(R.id.progressBarNote);
@@ -99,7 +102,7 @@ public class NoteActivity extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        //bottomNavigationView.setSelectedItemId(R.id.note);
+        bottomNavigationView.setSelectedItemId(R.id.add);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -107,11 +110,6 @@ public class NoteActivity extends AppCompatActivity {
                 int itemId = item.getItemId();
                 if (itemId == R.id.home) {
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                    overridePendingTransition(0, 0);
-                    return true;
-
-                } else if (itemId == R.id.add) {
-                    startActivity(new Intent(getApplicationContext(), AddActivity.class));
                     overridePendingTransition(0, 0);
                     return true;
 
@@ -221,6 +219,7 @@ public class NoteActivity extends AppCompatActivity {
             veganList.add("Butter");
             veganList.add("Yogurt");
             veganList.add("Egg");
+            veganList.add("Milk");
 
         }
 
@@ -266,10 +265,42 @@ public class NoteActivity extends AppCompatActivity {
 
 
         allergensDisplay = new ArrayList<>();
+        List<Ingredient> sortedIngredientsList = new ArrayList<>(ingredientsList);
+
+
+        Collections.sort(sortedIngredientsList, new Comparator<Ingredient>() {
+            @Override
+            public int compare(Ingredient ingredient1, Ingredient ingredient2) {
+                boolean isAllergen1 = allergensList.contains(ingredient1.getName());
+                boolean isAllergen2 = allergensList.contains(ingredient2.getName());
+                boolean isVegan1 = veganList.contains(ingredient1.getName());
+                boolean isVegan2 = veganList.contains(ingredient2.getName());
+
+                if (!isVegan1 && isVegan2) {
+                    return 1; // Ingredient1 is non-vegan, so it comes before vegan Ingredient2.
+                } else if (isVegan1 && !isVegan2) {
+                    return -1; // Ingredient2 is non-vegan, so it comes before vegan Ingredient1.
+                }
+
+                // If both are non-vegan or both are vegan, consider allergens.
+                if (isAllergen1 && !isAllergen2) {
+                    return -1; // Ingredient1 is an allergen, so it comes before Ingredient2.
+                } else if (!isAllergen1 && isAllergen2) {
+                    return 1; // Ingredient2 is an allergen, so it comes before Ingredient1.
+                }
+
+                // If both are non-vegan, both are vegan, or both are not allergens,
+                // then maintain the original order.
+                return 0;
+            }
+        });
+
+
+
+
         if (ingredientsList != null && !ingredientsList.isEmpty()) {
-            // Ingredients received via Intent, display the expandable RecyclerView
             List<IngredientGroup> ingredientGroups = new ArrayList<>();
-            for (Ingredient ingredient : ingredientsList) {
+            for (Ingredient ingredient : sortedIngredientsList) {
                 IngredientGroup group = new IngredientGroup(ingredient.getName(), Arrays.asList(ingredient));
                 ingredientGroups.add(group);
 
@@ -305,8 +336,25 @@ public class NoteActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    getWindow().setNavigationBarColor(getResources().getColor(R.color.navColorFix));
                     Context context = NoteActivity.this;
-                    BottomSheetDialog dialog = new BottomSheetDialog(context);
+                    //BottomSheetDialog dialog = new BottomSheetDialog(context);
+
+                    BottomSheetDialog dialog = new BottomSheetDialog(context) {
+                        @Override
+                        public void onStart() {
+                            super.onStart();
+                            View bottomSheet = findViewById(com.google.android.material.R.id.design_bottom_sheet);
+                            if (bottomSheet != null) {
+                                // Set a fixed height for the bottom sheet
+                                ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
+                                layoutParams.height = getResources().getDimensionPixelSize(R.dimen.bottom_sheet_height);
+                                bottomSheet.setLayoutParams(layoutParams);
+                            }
+                        }
+                    };
+
+
 
                     int dialogHeight = getResources().getDimensionPixelSize(R.dimen.bottom_sheet_height); // Create dimen resource
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, dialogHeight);
@@ -348,11 +396,27 @@ public class NoteActivity extends AppCompatActivity {
             button2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    getWindow().setNavigationBarColor(getResources().getColor(R.color.navColorFix));
+
                     Context context = NoteActivity.this;
-                    BottomSheetDialog dialog = new BottomSheetDialog(context);
+                    //BottomSheetDialog dialog = new BottomSheetDialog(context);
+                    BottomSheetDialog dialog = new BottomSheetDialog(context) {
+                        @Override
+                        public void onStart() {
+                            super.onStart();
+                            View bottomSheet = findViewById(com.google.android.material.R.id.design_bottom_sheet);
+                            if (bottomSheet != null) {
+                                // Set a fixed height for the bottom sheet
+                                ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
+                                layoutParams.height = getResources().getDimensionPixelSize(R.dimen.bottom_sheet_height);
+                                bottomSheet.setLayoutParams(layoutParams);
+                            }
+                        }
+                    };
 
                     int dialogHeight = getResources().getDimensionPixelSize(R.dimen.bottom_sheet_height); // Create dimen resource
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, dialogHeight);
+
 
                     View dialogView = LayoutInflater.from(context).inflate(R.layout.bottomsheetlayoutuh, null);
                     FlowLayout flowLayout = dialogView.findViewById(R.id.flowLayoutUnhealthy);
@@ -402,6 +466,7 @@ public class NoteActivity extends AppCompatActivity {
     }
     private void showBottomSheet() {
         Context context = NoteActivity.this;
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.navColorFix));
         BottomSheetDialog dialog = new BottomSheetDialog(context);
 
         View dialogView = LayoutInflater.from(context).inflate(R.layout.bottomsheetlayout, null);

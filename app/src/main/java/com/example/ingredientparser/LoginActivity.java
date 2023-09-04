@@ -27,7 +27,13 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginButton;
     private TextView signupTextView;
 
+    private TextView forgotPassword;
+
     private CheckBox rememberMe;
+
+    private FirebaseAuth mAuth;
+
+
 
 
     @Override
@@ -36,12 +42,17 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
+        mAuth = FirebaseAuth.getInstance();
 
         // Initialize views
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         loginButton = findViewById(R.id.loginButton);
         signupTextView = findViewById(R.id.signupTextView);
+        forgotPassword = findViewById(R.id.forgot);
+
+        // email = emailEditText.getText().toString().trim();
+
 
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
@@ -63,8 +74,28 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = emailEditText.getText().toString().trim();
+                if (!email.isEmpty()) {
+                    // Send a password reset email
+                    mAuth.sendPasswordResetEmail(email)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(LoginActivity.this, "Please check your email for instructions to reset your password", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, "Email does not exist", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                } else {
+                    Toast.makeText(LoginActivity.this, "Please enter your email first", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
 

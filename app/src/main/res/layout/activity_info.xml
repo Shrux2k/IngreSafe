@@ -78,6 +78,7 @@
                             android:textSize="18sp" />
 
                         <Switch
+                            android:id="@+id/matches"
                             android:layout_width="59dp"
                             android:layout_height="43dp"
                             android:layout_gravity="end" />
@@ -122,6 +123,7 @@
 
                         <!-- Switch for Chicken Egg -->
                         <Switch
+                            android:id="@+id/lowpower"
                             android:layout_width="59dp"
                             android:layout_height="43dp"
                             android:layout_gravity="end" />
@@ -164,6 +166,7 @@
                             android:textSize="18sp" />
 
                         <Switch
+                            android:id="@+id/textrecog"
                             android:layout_width="59dp"
                             android:layout_height="43dp"
                             android:layout_gravity="end" />
@@ -176,7 +179,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="59dp"
                     android:layout_marginStart="20dp"
-                    android:text="To also scan words that are written in cursive or in non-standard fonts. Works best on Android 10.0 and newer."
+                    android:text="To also scan words that are written in cursive or in non-standard fonts. Works best on Android 10 and newer."
                     android:textColor="@color/white" />
 
                 <RelativeLayout

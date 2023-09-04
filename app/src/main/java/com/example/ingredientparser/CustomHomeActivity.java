@@ -48,6 +48,8 @@ public class CustomHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_home);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.navColorFix));
+
 
         recyclerView = findViewById(R.id.documentRecyclerView);
         SearchView searchView = findViewById(R.id.searchView);

@@ -64,8 +64,10 @@ import java.io.Serializable;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import androidx.exifinterface.media.ExifInterface;
@@ -342,11 +344,19 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
                 }
             }
 
-            ArrayList<String> ingredientList = new ArrayList<>();
-            List<String> foundIngredients = new ArrayList<>();
-
-
+            List<String> wordList = new ArrayList<>();
             for (String word : words) {
+                wordList.add(word);
+            }
+
+            Set<String> uniqueWords = new HashSet<>(wordList);
+            String[] uniqueArray = uniqueWords.toArray(new String[0]);
+
+
+            ArrayList<String> ingredientList = new ArrayList<>();
+
+
+            for (String word : uniqueArray) {
                 // Add each word to the ArrayList
                 ingredientList.add(word);
             }

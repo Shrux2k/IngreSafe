@@ -33,6 +33,10 @@
         <item name="itemIconTint">@color/bottom_navigation_color</item>
     </style>
 
+    <color name="currentUserBackgroundColor">#2c2c2e</color>
+
+    <color name="navColorFix">#1c1c1e</color>
+    <color name="splashStatusBarColor">#79d5b5</color>
 
 
 </resources>

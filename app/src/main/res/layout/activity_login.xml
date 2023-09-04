@@ -110,6 +110,7 @@
                         android:id="@+id/loginButton"
                         android:layout_height="52dp"
                         android:layout_weight="1"
+                        android:layout_marginLeft="0dp"
                         android:text="Sign In"
                         android:textStyle="bold"
                         android:gravity="center"
@@ -118,7 +119,19 @@
                         android:textColor="@color/black"
                         android:textSize="16dp"
                         android:backgroundTint="#4fcba3"/>
+
+
                 </LinearLayout>
+                <TextView
+                    android:id="@+id/forgot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/white"
+                    android:text="Forgot password?"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginTop="20dp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_marginBottom="26dp"

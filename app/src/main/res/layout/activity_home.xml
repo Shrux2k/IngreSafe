@@ -101,11 +101,11 @@
 
         <TextView
             android:layout_width="297dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="-310dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="-280dp"
             android:layout_marginTop="110dp"
             android:fontFamily="sans-serif"
-            android:text="Scan more to unlock the next Badge"
+            android:text="Tap the badge to view your \nbadges and leaderboards."
             android:textColor="@color/white"
             android:textSize="12dp"
             android:textStyle="italic" />

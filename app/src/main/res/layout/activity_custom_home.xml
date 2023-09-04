@@ -75,9 +75,8 @@
                     android:layout_width="415dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:backgroundTint="#673BB8"
                     android:gravity="center"
-                    android:paddingTop="0dp"
+                    android:backgroundTint="#673BB8"
                     android:paddingBottom="5dp"
                     android:text="Save my preferences" />
             </LinearLayout>
