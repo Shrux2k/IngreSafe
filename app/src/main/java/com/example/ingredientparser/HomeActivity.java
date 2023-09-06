@@ -54,6 +54,8 @@ public class HomeActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
 
+    String badgeName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,20 +213,46 @@ public class HomeActivity extends AppCompatActivity {
 
 
                             updateBadge(scans); // Update the badge based on the loaded scan count
-                            String scan = "Total Scans : " + scans+"/"+totalCount;
+                            String scan = "Healthy Ingredient Scans : " + scans+"/"+totalCount;
                             scanCountView.setText(scan);
                             remScans = totalCount-scans;
-                            remScansView.setText(remScans+" scans left to unlock the next badge");
+                            if(scans > 3000)
+                            {
+                                remScansView.setText("You have unlocked all tiers!");
+
+                            }
+                            else {
+                                remScansView.setText("Scan " + remScans + " healthy ingredients more to unlock the next tier - "+badgeName);
+                            }
 
                             int endValue =0;
 
-                            int startValue = (int) ((float) scans / totalCount * 100);
+                            int startValue = 0;
 
 
                             int duration = 1000;
 
+                            if (scans >= 0 && scans < 1000) {
+                                totalCount = 1000;
+                                endValue = (int) ((float) scans / totalCount * 100);
+                                startValue = 0; // End at 100%
+                            } else if (scans >= 1000 && scans < 2000) {
+                                totalCount = 2000;
+                                endValue = (int) ((float) (scans - 1000) / (totalCount - 1000) * 100);
+                                startValue = 0; // End at 100%
+                            } else if (scans >= 2000 && scans < 3000) {
+                                totalCount = 3000;
+                                endValue = (int) ((float) (scans - 2000) / (totalCount - 2000) * 100);
+                                startValue = 0; // End at 100%
+                            } else {
+                                totalCount = 10000;
+                                endValue = (int) ((float) scans / totalCount * 100);
+                                startValue = 0; // End at 100%
+                            }
+
                             ProgressBar progressBar = findViewById(R.id.progressBar);
-                            ObjectAnimator.ofInt(progressBar, "progress", endValue, startValue)
+                            progressBar.setMax(100);
+                            ObjectAnimator.ofInt(progressBar, "progress", startValue, endValue)
                                     .setDuration(duration)
                                     .start();
 
@@ -256,20 +284,29 @@ public class HomeActivity extends AppCompatActivity {
 
     private void updateBadge(int scansValue) {
         System.out.println("Update badge"+scansValue);
-        if (scansValue >= 500 && scansValue<1000) {
-            badgeImageView.setImageResource(R.drawable.expert_foodie);
+        if (scansValue >= 0 && scansValue<1000) {
+            badgeImageView.setImageResource(R.drawable.novice_foodie);
             totalCount = 1000;
-        }else if (scansValue>=1000)
+            badgeName = "Food Detective";
+        }
+        else if (scansValue >= 1000 && scansValue<2000)
         {
+            badgeImageView.setImageResource(R.drawable.beginner_foodie);
+            totalCount = 2000;
+            badgeName = "Wellness Watcher";
+
+        }else if (scansValue>=2000 && scansValue<3000)
+        {
+            badgeImageView.setImageResource(R.drawable.expert_foodie);
+            totalCount = 3000;
+            badgeName = "Health Maestro";
+
+        }
+        else if(scansValue>3000)
+        {
+
             badgeImageView.setImageResource(R.drawable.master_foodie);
             totalCount = 10000;
-        }
-        else if (scansValue >= 100 && scansValue <500) {
-            badgeImageView.setImageResource(R.drawable.beginner_foodie);
-            totalCount = 500;
-        } else {
-            badgeImageView.setImageResource(R.drawable.novice_foodie);
-            totalCount = 100;
         }
     }
 }

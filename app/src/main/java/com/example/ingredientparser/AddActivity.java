@@ -96,6 +96,8 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
 
     int counter;
 
+    int count;
+
 
 
 
@@ -402,6 +404,9 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
                                 if (health.equals("U")) {
                                     unhealthy.add(ingredientName);
                                 }
+                                else {
+                                    count++;
+                                }
 
 
                             }catch (Exception e)
@@ -504,9 +509,11 @@ public class AddActivity extends AppCompatActivity implements ImageAnalysis.Anal
 
                     // Check if the "Scans" field exists and has a value
                     if (currentScansValue != null) {
-                        // Increment the "Scans" value by one
-                        long updatedScansValue = currentScansValue + 1;
-                        // Create a map to update the "Scans" field
+
+                        //long updatedScansValue = currentScansValue + 1;
+                        long updatedScansValue = currentScansValue+ count;
+
+
                         Map<String, Object> updates = new HashMap<>();
                         updates.put("Scans", updatedScansValue);
 
