@@ -41,7 +41,7 @@ Ingresafe is built using a variety of technologies, including:
 
 ### Contributing
 
-We welcome contributions from the community to make Ingresafe even better. If you'd like to contribute, please review our [Contribution Guidelines](CONTRIBUTING.md).
+We welcome contributions from the community to make Ingresafe even better. If you'd like to contribute, please review [Contribution Guidelines](CONTRIBUTING.md).
 
 ### License
 
@@ -49,7 +49,7 @@ This project is licensed under the [MIT License](LICENSE.md).
 
 ### Contact
 
-If you have any questions, suggestions, or concerns, feel free to contact our team at [contact@ingresafe.com](mailto:contact@ingresafe.com).
+If you have any questions, suggestions, or concerns, feel free to contact me at [ShashankReddy.corp@gmail.com](mailto:shashankreddy.corp@gmail.com).
 
 Thank you for choosing Ingresafe to empower your dietary choices and enhance your ingredient awareness.
 
